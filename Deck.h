@@ -12,6 +12,9 @@
 #include <deque>
 #include <stdexcept>
 #include <string>
+#include <memory>
+#include <cstdlib>
+
 
 
 //Macros for our names and suits
@@ -22,7 +25,7 @@ class Deck
 {
   // Fields
 private:
-  std::deque<Card> Cards;
+  std::deque<Card> *Cards;
   int count;
 
 public:
@@ -40,26 +43,19 @@ public:
     {
       throw std::invalid_argument("Received invalid Ace value");
     }
-
+    Cards = new std::deque<Card>;
     setCards(aValue);
     setCount(52);
   }
 
-  // Destructor where we have to destroy all 52 cards by freeing them
+  // Destructor where we have to destroy the deque
   ~Deck()
   {
-    for(int i = 0; i < 52; i++){
-      Card c = Cards.front();
-      Cards.pop_front();
-      free(&c);
-      //Just free all our cards from the deque
-    }
-
-    //Then destroy the deque
+    delete Cards;
   }
 
   // Getters and setter
-  std::deque<Card> getCards()
+  std::deque<Card>* getCards() const
   {
     return Cards;
   }
@@ -72,22 +68,81 @@ public:
     std::string names[13] = NAMES;
 
 
-    //We need to heap allocate these cards so they don't go out of scope when this stack pops off
+    //Just make each card now using smart pointers
     for(int i = 0; i < 13; i++){
+      int val = 1;
       for(int j = 0; j < 4; j++){
-        Card *c = (Card *) malloc (sizeof(Card));
-        Card *c = new Card(1, names[i], suits[j]);
-        Cards.push_back(*c);
+        //Card *c = (Card *) malloc (sizeof(Card));
+        switch (i){
+        //Ace case
+        case 0:{
+          std::shared_ptr<Card> c (new Card(aValue, names[i], suits[j]));
+          Cards->push_back(*c);
+          break;
+        }
+        default:
+        {
+          std::shared_ptr<Card> c (new Card(val, names[i], suits[j]));
+          Cards->push_back(*c);
+          break;
+        }
+        }
+        
+      }
+      if(i < 10){
+        //We need jack, queen, king to stay the same value
+        val++;
       }
     }
   }
 
-  int getCount()
+  int getCount() const
   {
     return count;
   }
 
-  void setCount(int count){
+  void setCount(int count)
+  {
     this->count = count;
+  }
+
+  //Decks need to be able to shuffle themselves
+  /**
+   * This is the shuffle function for the deck that uses a riffle shuffle.
+   * Just uses both iterators at the beginning and end to shuffle cards randomly to the end of the deque
+   */
+  void shuffle()
+  {
+    int left = 0;
+    int right = 0;
+
+    //Move one iterator to the front and card 27
+    std::deque<Card>::iterator leftIt = Cards->begin();
+    std::deque<Card>::iterator rightIt = Cards->begin();
+
+    for(int i = 0; i < 27; i++){
+      rightIt++;
+    }
+
+    //Keep moving cards to the end randomly 
+    while(left < 26 && right < 26){
+      //Move 1 to 3 cards to the back for each half of the deck
+      int moves = rand() % 3 + 1;
+      
+      for(int i = 0; i < moves; i++){
+        Cards->push_back(*leftIt);
+        leftIt++;
+      }
+      left += moves;
+
+      moves = rand() % 3 + 1;
+
+      for(int i = 0; i < moves; i++){
+        Cards->push_back(*rightIt);
+        rightIt++;
+      }
+      right += moves;
+    }
+
   }
 };
