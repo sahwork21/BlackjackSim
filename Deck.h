@@ -10,6 +10,7 @@
  */
 #include "Card.h"
 #include <deque>
+#include <vector>
 #include <stdexcept>
 #include <string>
 #include <memory>
@@ -144,5 +145,46 @@ public:
       right += moves;
     }
 
+  }
+
+  /**
+   * This is the method that makes an initial dealing of cards to the player or dealer
+   * @return a pair of Card objects to the calling method
+   */
+  std::pair<Card, Card> dealHand()
+  {
+    //Pop off the front of the deque and return the two cards at the front of the deque
+    std::pair<Card, Card> hand (Cards->front(), Cards->front());
+    Cards->pop_front();
+    hand.second = Cards->front();
+    Cards->pop_front();
+    count -= 2;
+
+    //Now return the hand to the player
+    return hand;
+  }
+
+  /**
+   * Deals a card to the player or dealer upon its call
+   * @return the front card in the deque
+   * 
+   */
+  Card hit()
+  {
+    Card ret = Cards->front();
+    Cards->pop_front();
+    count--;
+    return ret;
+  }
+
+  /**
+   * Returns the cards from the hands of the dealer and player to be put back into the deck
+   */
+  void returnHand(std::vector<Card> hand, int count)
+  { 
+    for(int i = 0; i < count; i++){
+      Cards->push_back(hand[i]);
+    }
+    this->count += count;
   }
 };
