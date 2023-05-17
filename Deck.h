@@ -52,7 +52,8 @@ public:
   // Destructor where we have to destroy the deque
   ~Deck()
   {
-    delete Cards;
+    delete [] Cards;
+    delete &Cards;
   }
 
   // Getters and setter
@@ -116,6 +117,9 @@ public:
   {
     int left = 0;
     int right = 0;
+    //Make our new deck to contain stuff
+    std::deque<Card> left;
+    std::deque<Card> right;
 
     //Move one iterator to the front and card 27
     std::deque<Card>::iterator leftIt = Cards->begin();
@@ -180,7 +184,7 @@ public:
   /**
    * Returns the cards from the hands of the dealer and player to be put back into the deck
    */
-  void returnHand(std::vector<Card> hand, int count)
+  void returnHand(std::vector<Card>& hand, int count)
   { 
     for(int i = 0; i < count; i++){
       Cards->push_back(hand[i]);
