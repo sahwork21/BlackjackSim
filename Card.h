@@ -14,8 +14,8 @@ class Card
 private:
   // Fields
   int value;
-  std::string name;
-  std::string suit;
+  char *name;
+  char *suit;
 
 public:
   // Default constructor that does nothing
@@ -35,6 +35,8 @@ public:
   // Destructor for Card but we didn't allocate any resources so do nothing
   ~Card()
   {
+    delete [] name;
+    delete [] suit;
   }
 
   // Getters and setter for data
@@ -60,11 +62,13 @@ public:
 
   void setName(std::string name)
   {
-    this->name = name; 
+    this->name = new char[10];
+    strncpy(this->name, name.c_str(), name.length());
     
   }
   
   void setSuit(std::string suit){
-    this->suit = suit;
+    this->suit = new char[10];
+    strncpy(this->suit, suit.c_str(), suit.length());
   }
 };

@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
   //Construct our deck of cards with aces on 11's
   Deck *deck = new Deck(11);
   deck->shuffle();
+  deck->shuffle();
   //We need an array to count the occurrences of each starting hand from 4 to a Blackjack 21
   int occurences[18] = {0};
   int score = 0;

@@ -52,7 +52,12 @@ public:
   // Destructor where we have to destroy the deque
   ~Deck()
   {
-    delete [] Cards;
+    //We have to delete every card now
+    while(!Cards->empty()){
+      Cards->front();
+      Cards->pop_front();
+    }
+      
     delete &Cards;
   }
 
@@ -115,39 +120,44 @@ public:
    */
   void shuffle()
   {
-    int left = 0;
-    int right = 0;
-    //Make our new deck to contain stuff
+    
+    //Make our new deck to contain halves temporarily
     std::deque<Card> left;
     std::deque<Card> right;
 
-    //Move one iterator to the front and card 27
-    std::deque<Card>::iterator leftIt = Cards->begin();
-    std::deque<Card>::iterator rightIt = Cards->begin();
+    
 
-    for(int i = 0; i < 27; i++){
-      rightIt++;
+    for(int i = 0; i < 26; i++){
+      right.push_back(Cards->front());
+      Cards->pop_front();
+    }
+    for(int i = 0; i < 26; i++){
+      left.push_back(Cards->front());
+      Cards->pop_front();
     }
 
-    //Keep moving cards to the end randomly 
-    while(left < 26 && right < 26){
-      //Move 1 to 3 cards to the back for each half of the deck
-      int moves = rand() % 3 + 1;
+  
+
+    //Keep moving cards to the end in a riffle
+    //Randomly pick left or right first to insert
+    int move = 0;
+    for(int i = 0; i < 26; i++){
+      move = rand();
+      if(move % 2 == 0){
+        Cards->push_back(left.front());
+        Cards->push_back(right.front());
+        left.pop_front();
+        right.pop_front();
+      }
+      else{
+        Cards->push_back(right.front());
+        Cards->push_back(left.front());
+        left.pop_front();
+        right.pop_front();
+      }
       
-      for(int i = 0; i < moves; i++){
-        Cards->push_back(*leftIt);
-        leftIt++;
-      }
-      left += moves;
-
-      moves = rand() % 3 + 1;
-
-      for(int i = 0; i < moves; i++){
-        Cards->push_back(*rightIt);
-        rightIt++;
-      }
-      right += moves;
-    }
+    } 
+    
 
   }
 
