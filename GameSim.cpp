@@ -1,102 +1,80 @@
 /**
  * @file GameSim.cpp
  * @author Sean Hinton (sahwork21@gmail.com)
- * @brief This is the simulator for a game of BlackJack that prints the results of a given amount of games
- * It is used to produce a rough probability distribution of each card
+ * @brief This is just a C file disguised as C++ to help restart the implementation
+ * 
+ * 
  */
-
-#include "Deck.h"
+#include <stdio.h>
+#include <ctime>
 #include <iostream>
+#include <string>
 
-//Value for the upper limit of sims you can run
-#define SIM_LIMIT 5000
+//We will be using strings in our cards struct
+using std::string;
+using std::cout;
+using std::cin;
+using std::endl;
 
-
-/**
- * Main method that does the simulating some amount of times
- * @param argc the argument count
- * @param argv the cmdline arguments to how many times you want to sim
- * @return 0 on a successful sim 1 if not
- */
-int main(int argc, char *argv[])
+struct DefineCard
 {
-  //We are reading in arguments for how many games you want to play
-  //It probably should be at a minimum 30 plays, but it should probably go even higher
-  //The created probability distribution will be discrete
-
-  //Not enough arguments given
-  if(argc != 2){
-    std::cerr << "Usage: ./GameSim RoundsOfSims" << std::endl;
-    exit(EXIT_FAILURE);
-  }
-
-  //Scan in the rounds of simming argument and it better be a number
-  int rounds;
-  
-  int match = sscanf(argv[1], "%d", &rounds);
-  if(match != 1){
-    std::cerr << "Enter an integer for rounds of sims" << std::endl;
-    exit(EXIT_FAILURE);
-  }
-
-  if(rounds < 0 || rounds > SIM_LIMIT){
-    std::cerr << "Enter a value between 0 and 5000 for rounds of sims" << std::endl;
-    exit(EXIT_FAILURE);
-  }
+	string suit;
+	string name;
+	int score;   // Score is the name of the card or Ace which can be 11 or 1
+} Deck[53]; // We need extra space to shuffle
 
 
-  //Construct our deck of cards with aces on 11's
-  Deck *deck = new Deck(11);
-  deck->shuffle();
-  deck->shuffle();
-  //We need an array to count the occurrences of each starting hand from 4 to a Blackjack 21
-  int occurences[18] = {0};
-  int score = 0;
-
-  //Now we can run our simulator
-  //Hands are just Vectors of Card objects that each person has
-  for(int i = 0; i < rounds; i++){
-    //We deal a hand to the player
-    std::vector<Card> player;
-    std::pair<Card, Card> initHand = deck->dealHand();
-
-
-    
-    player.push_back(initHand.first);
-    player.push_back(initHand.second);
-    score += initHand.first.getValue();
-    score += initHand.second.getValue();
-
-
-    //We need to check if there are two aces that may push us to a bust
-    if(score > 21 && (player.at(0).getName() == "Ace" || player.at(1).getName() == "Ace")){
-      //Change our score of a card from 11 to 1 as the rules state
-      score -= 10;
+int main()
+{
+	int cardCount = 0;
+	string names[13] = { "Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King" };
+	string suits[4] = { "Diamonds", "Clubs", "Hearts", "Spades" };
+	int CardValue[13] = { 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
+  for(int i = 0; i < 4; i++){
+    for(int j = 0; j < 13; j++){
+      Deck[cardCount].name = names[j];
+		  Deck[cardCount].suit = suits[i];
+		  Deck[cardCount].score = CardValue[j];
+      cardCount++;
     }
-
-    //Increase our score value 
-    occurences[score - 4] += 1;
-
-    score = 0;
-    deck->returnHand(player, 2);
-    
   }
+	
+	
+  //Print out the cards we have
+  cout << "Cards in order" << endl;
+	for(int x = 0; x < 52; x ++){
+		cout << Deck[x].name << " of " << Deck[x].suit << ": Value of " << Deck[x].score << endl;
+	}
 
+  //Swap two randomly selected cards 500 times using that extra blank spot of space
+	for (int i = 0; i < 500; i++){
+		int a = rand() % 52;
+		int b = rand() % 52;
+		
+		Deck[52].name = Deck[a].name;
+		Deck[52].suit = Deck[a].suit;
+		Deck[52].score = Deck[a].score;
+		
 
+		Deck[a].name = Deck[b].name;
+		Deck[a].suit = Deck[b].suit;
+		Deck[a].score = Deck[b].score;
+		
 
-  //Print out our results of the sim so we can look at it
-  for(int i = 0; i < 18; i++){
-    std::cout << "There were " << occurences[i] << " " << i + 4 << std::endl;
-  }
+		Deck[b].name = Deck[52].name;
+		Deck[b].suit = Deck[52].suit;
+		Deck[b].score = Deck[52].score;
+		
 
-  std::cout << rounds << " were completed" << std::endl;
+	}
 
-  //Destroy all our objects 
-  delete &deck;
-  
-  
-  exit(EXIT_SUCCESS);
+  //Print out our shuffled deck
+  cout << endl << "Shuffled cards" << endl;
+	for(int i = 0; i < 52; i++){
+		cout << Deck[i].name << " of " << Deck[i].suit << " : Value of " << Deck[i].score <<  endl;
+	}
 
-
-
+	
+	
+  return 0;
 }
