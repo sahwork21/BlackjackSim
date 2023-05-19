@@ -26,7 +26,7 @@ void Card::setSuit(string suit)
 
 
 // Parametrized constructor
-Card::Card(int score, string name, string suit)
+Card::Card(int score, string suit, string name)
 {
   setScore(score);  
   setName(name);

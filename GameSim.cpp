@@ -5,6 +5,9 @@
  * 
  * 
  */
+
+
+#include "Card.h"
 #include <stdio.h>
 #include <ctime>
 #include <iostream>
@@ -21,15 +24,9 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-struct CardStruct
-{
-	string suit;
-	string name;
-	int score;   // Score is the name of the card or Ace which can be 11 or 1
-} typedef Card;
 
-//Our deck of cards
-Card Deck[53];
+//Our deck of cards which is an array of pointers to some objects
+Card *Deck[53];
 
 
 //RNG values from random library
@@ -52,9 +49,8 @@ void populateDeck()
 	int CardValue[13] = { 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
   for(int i = 0; i < 4; i++){
     for(int j = 0; j < 13; j++){
-      Deck[cardCount].name = names[j];
-		  Deck[cardCount].suit = suits[i];
-		  Deck[cardCount].score = CardValue[j];
+      //Construct our Card here
+      Deck[cardCount] = new Card(CardValue[j], suits[i], names[j]);
       cardCount++;
     }
   }
@@ -63,7 +59,7 @@ void populateDeck()
   //Print out the cards we have
   cout << "Cards in order" << endl;
 	for(int x = 0; x < 52; x ++){
-		cout << Deck[x].name << " of " << Deck[x].suit << ": Value of " << Deck[x].score << endl;
+		cout << Deck[x]->getName() << " of " << Deck[x]->getSuit() << ": Value of " << Deck[x]->getScore() << endl;
 	}
 
   //Swap two randomly selected cards 500 times using that extra blank spot of space
@@ -71,19 +67,12 @@ void populateDeck()
 		int a = dist(rng) % 52;
 		int b = dist(rng) % 52;
 		
-		Deck[52].name = Deck[a].name;
-		Deck[52].suit = Deck[a].suit;
-		Deck[52].score = Deck[a].score;
+    //Swapping of cards now we just exchange pointers
+		Deck[52] = Deck[a];
+	
+    Deck[a] = Deck[b];
 		
-
-		Deck[a].name = Deck[b].name;
-		Deck[a].suit = Deck[b].suit;
-		Deck[a].score = Deck[b].score;
-		
-
-		Deck[b].name = Deck[52].name;
-		Deck[b].suit = Deck[52].suit;
-		Deck[b].score = Deck[52].score;
+    Deck[b] = Deck[52];
 		
 
 	}
@@ -91,7 +80,7 @@ void populateDeck()
   //Print out our shuffled deck
   cout << endl << "Shuffled cards" << endl;
 	for(int i = 0; i < 52; i++){
-		cout << Deck[i].name << " of " << Deck[i].suit << " : Value of " << Deck[i].score <<  endl;
+		cout << Deck[i]->getName() << " of " << Deck[i]->getSuit() << " : Value of " << Deck[i]->getScore() <<  endl;
 	}
 }
 
@@ -141,10 +130,10 @@ int main(int argc, char *argv[])
       b = dist(rng) % 52;
     }while(b == a);
 
-    int score = Deck[a].score + Deck[b].score;
+    int score = Deck[a]->getScore() + Deck[b]->getScore();
     
     //If we got a 22 just change score to a 12 as one ace become a 1s
-    if(score == 22 && (Deck[a].name.compare("Ace") || Deck[b].name.compare("Ace"))){
+    if(score == 22 && (Deck[a]->getName().compare("Ace") || Deck[b]->getName().compare("Ace"))){
       score = 12;
     }
 
@@ -160,6 +149,7 @@ int main(int argc, char *argv[])
     cout << "There are " << occurences[i] << " " << i + 4 << "'s" << endl;
   }
 
+  
 
   return 0;
 }
