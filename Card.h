@@ -35,9 +35,9 @@ class Card
     ~Card();
 
     //Getters for the Card
-    int getScore();
-    string &getSuit();
-    string &getName();
+    int getScore() const;
+    string getSuit() const;
+    string getName() const;
 
 
 
