@@ -58,8 +58,8 @@ void populateDeck()
 	
   //Print out the cards we have
   cout << "Cards in order" << endl;
-	for(int x = 0; x < 52; x ++){
-		cout << Deck[x]->getName() << " of " << Deck[x]->getSuit() << ": Value of " << Deck[x]->getScore() << endl;
+	for(int i = 0; i < 52; i++){
+		cout << Deck[i]->getName() << " of " << Deck[i]->getSuit() << ": Value of " << Deck[i]->getScore() << endl;
 	}
 
   //Swap two randomly selected cards 500 times using that extra blank spot of space
