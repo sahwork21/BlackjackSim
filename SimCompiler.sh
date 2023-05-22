@@ -10,16 +10,22 @@ if [ $? -ne 0 ]; then
     echo "Failed to make Card object"
     return 1
 fi
+
+
+g++ -Wall -std=c++17 -g -c Deck.cpp -o Deck.o
+if [ $? -ne 0 ]; then
+    echo "Failed to make Deck object"
+    return 1
+fi
+
 g++ -Wall -std=c++17 -g -c GameSim.cpp -o GameSim.o
 if [ $? -ne 0 ]; then
     echo "Failed to make GameSim object"
     return 1
 fi
 
-
-
 #Finally compile our executable
-g++ -Wall -std=c++17 -g GameSim.o Card.o -o GameSim
+g++ -Wall -std=c++17 -g GameSim.o Card.o Deck.o -o GameSim
 
 
 #Check that what we compiled is there or not

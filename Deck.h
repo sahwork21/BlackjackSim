@@ -11,6 +11,7 @@
 #include <random>
 #include <string>
 #include <stdexcept>
+#include <ctime>
 #define DECK_SIZE 52
 
 //This is how we will represent Cards easily using enums and 

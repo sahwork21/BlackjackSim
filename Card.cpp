@@ -8,6 +8,11 @@
 #include "Card.h"
 //Class for a Card containing its value, name, and suit
 
+//Our default constructor should really never be called
+Card::Card()
+{
+  Card(0, "", "");
+}
 
 void Card::setScore(int score)
 {
@@ -54,9 +59,9 @@ string Card::getSuit() const
   return suit;
 }
 
-string Card::toString() const
+std::ostream& operator<<(std::ostream& strm, const Card &card)
 {
-  return getName() + "of" + getSuit() + " : Value of " + std::to_string(getScore()) + "\n";
+  return strm << card.getName() << "of" << card.getSuit() << " : Value of " << std::to_string(card.getScore());
 }
 
 

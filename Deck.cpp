@@ -10,6 +10,7 @@ using std::invalid_argument;
 //Constructor for a Deck
 Deck::Deck()
 {
+  
   setCards();
   front = 0;
   //Back points to the next open spot in the array
@@ -19,7 +20,9 @@ Deck::Deck()
 //Destructor for a Deck
 Deck::~Deck()
 {
-  delete [] cards;
+  for(int i = 0; i < DECK_SIZE; i++){
+    delete cards[i];
+  }
 }
 
 //Setter for the cards array
@@ -86,11 +89,12 @@ void Deck::shuffleDeck()
 
   //Uniform distribution so we fairly can get from 0 to 51
   std::uniform_int_distribution<uint32_t> dist(0,51); // range [0,51]
-
+  std::uniform_int_distribution<int32_t> roundDist(500, 700);
   
   Card *temp = cards[0];
+  int rounds = roundDist(rng);
   //Swap two randomly selected cards 500 to 700 times using the temp pointer
-	for(int i = 0; i < dist(rng) % 200 + 500; i++){
+	for(int i = 0; i < rounds; i++){
 		int a = dist(rng) % 52;
 		int b = dist(rng) % 52;
 		

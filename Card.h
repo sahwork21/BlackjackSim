@@ -9,7 +9,7 @@
 #define CARD_H
 
 #include <string>
-
+#include <iostream>
 
 using std::string;
 
@@ -33,6 +33,9 @@ class Card
     void setName(string name);
 
   public:
+    //Default constructor for Card
+    Card();
+
     //Prototype for constructor
     Card(int score, string suit, string name);
     //Destructor
@@ -44,9 +47,9 @@ class Card
     string getName() const;
     string toString() const;
 
-    //To String listing out Cards contents
-    string toString() const;
-
+    
+    //Output stream for a Card object
+    friend std::ostream& operator<<(std::ostream& strm, const Card &card);
 
   
 

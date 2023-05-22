@@ -8,6 +8,7 @@
 
 
 #include "Card.h"
+#include "Deck.h"
 #include <stdio.h>
 #include <ctime>
 #include <iostream>
