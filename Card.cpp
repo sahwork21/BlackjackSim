@@ -54,6 +54,11 @@ string Card::getSuit() const
   return suit;
 }
 
+string Card::toString() const
+{
+  return getName() + "of" + getSuit() + " : Value of " + std::to_string(getScore()) + "\n";
+}
+
 
 
 

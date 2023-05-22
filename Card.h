@@ -42,7 +42,10 @@ class Card
     int getScore() const;
     string getSuit() const;
     string getName() const;
+    string toString() const;
 
+    //To String listing out Cards contents
+    string toString() const;
 
 
   

@@ -9,6 +9,10 @@
 
 #include "Card.h"
 #include <random>
+#include <string>
+
+//This is how we will represent Cards easily using enums and 
+//enum suits{Diamonds, Clubs, Hearts, Spades};
 
 /**
  * Container for a deck of Card objects
@@ -17,6 +21,9 @@
  */
 class Deck
 {
+
+
+  
   /**
    * Decks have an Array of 53 card objects. I don't know smart pointers yet
    * It also contains the front and back so we can maintain a circular array for a queue
