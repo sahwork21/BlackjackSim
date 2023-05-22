@@ -13,7 +13,11 @@
 
 using std::string;
 
-//Container for our Card class
+/**
+ * Container for our Card objects
+ * Each card has a value, name, and string
+ * 
+ */
 class Card
 {
 
