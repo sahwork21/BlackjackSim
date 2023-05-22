@@ -10,6 +10,8 @@
 #include "Card.h"
 #include <random>
 #include <string>
+#include <stdexcept>
+#define DECK_SIZE 52
 
 //This is how we will represent Cards easily using enums and 
 //enum suits{Diamonds, Clubs, Hearts, Spades};
@@ -29,7 +31,7 @@ class Deck
    * It also contains the front and back so we can maintain a circular array for a queue
    */
   private:
-    Card *cards[53]; //Nobody should be able to access these values through getters
+    Card *cards[52]; //Nobody should be able to access these values through getters
     int front;
     int back;
 
@@ -47,7 +49,7 @@ class Deck
     Card *dealCard();
 
     //Method that returns Cards
-    void returnCard();
+    void returnCard(Card *card);
 
 
     //Method for shuffling a deck of Cards by randomly swapping two cards
