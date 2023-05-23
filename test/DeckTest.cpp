@@ -50,11 +50,14 @@ int main()
 
 
   //Try to add a Card beyond the allowed limit
-  Card *c = new Card();
-  try{
-    total++;
-    d->returnCard(c);
+  Card *c = new Card(1, "Diam", "Ace");
 
+  total++;
+  d->returnCard(c);
+
+
+  //Deck should not have grown
+  if(d->getSize() != 52){
     //We failed
     cerr << "Failed to get exception when inserting to full deck" << endl;
     delete c;
@@ -63,25 +66,16 @@ int main()
     
 
   //We need to get an invalid argument when trying to insert
-  } catch (invalid_argument e) {
-    //Make sure it has the right message
-    if(strcmp(e.what(), "Attempting to return a Card to a full deck") == 0){
-      passing++;
-      //We passed
-    }
-    else{
-      cerr << "Wrong exception message on returning Cards";
-    }
-
+  } 
     
-  };
+  passing++;
 
   delete c;
 
 
-  //We should be able to remove 52 cards then get an exception
+  //We should be able to remove 52 cards then be unable to draw again
   for(int i = 0; i < 52; i++){
-    delete d->dealCard();
+    d->dealCard();
   }
 
   //Assert size is 0
@@ -95,20 +89,18 @@ int main()
   passing++;
 
   //We have deleted all the cards in our deck
-  try{
-    total++;
-    d->dealCard();
+  total++;
+  Card *n = d->dealCard();
 
+  if(n != NULL){
     //We failed
     cerr << "Failed to get exception when dealing from an empty decks" << endl;
     delete d;
     report(passing, total);
 
   //We need to get an invalid argument when trying to insert
-  } catch (invalid_argument) {
-    passing++;
-    //We passed
-  };
+  } 
+  passing++;
 
   //Scrap the old deck
   delete d;
@@ -127,7 +119,7 @@ int main()
   }
 
   Card *c2 = d->dealCard();
-
+  Card *c3 = c2;
   if(d->getSize() != 50){
     //We failed
     cerr << "Failed to decrement deck size" << endl;
@@ -145,7 +137,7 @@ int main()
   }
 
   c2 = d->dealCard();
-  Card *c3 = c2;
+  
   if(d->getSize() != 50){
     //We failed
     cerr << "Failed to decrement deck size" << endl;
@@ -170,6 +162,7 @@ int main()
     delete d;
     report(passing, total);
   }
+  passing++;
 
 
   

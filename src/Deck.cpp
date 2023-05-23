@@ -5,7 +5,7 @@
  */
 #include "Deck.h"
 
-using std::invalid_argument;
+
 
 //Constructor for a Deck
 Deck::Deck()
@@ -23,7 +23,7 @@ Deck::~Deck()
 {
   for(int i = 0; i < DECK_SIZE; i++){
     #ifdef TEST
-      std::cout << cards[i] << " Was destroyed" << std::endl;
+      std::cout << *cards[i] << " Was destroyed" << std::endl;
     #endif
 
     delete cards[i];
@@ -55,38 +55,42 @@ void Deck::setCards()
 Card* Deck::dealCard()
 {
 
-  //Need an exception for an empty deck
-  //Exception occurs when front = back so we are trying to get from an empty spot
+  //If you try to deal from an empty deck you get nothing
   if(size == 0){
-    throw invalid_argument("Attempting to deal a Card from an empty deck");
+    return NULL;
   }
-
-
-  //Get the top card
-  Card *ret = cards[front];
   
-  //Change our front value and we don't want it to get too large
-  front = (front + 1) % DECK_SIZE;
-  size--;
-  return ret;
+    //Get the top card
+    Card *ret = cards[front];
+  
+    //Change our front value and we don't want it to get too large
+    front = (front + 1) % DECK_SIZE;
+    size--;
+    return ret;
+  
+
+
+  
 
 }
 
 //Return a Card to our deck
-void Deck::returnCard(Card *card)
+void Deck::returnCard(Card *card) 
 {
 
-  //We are trying to return a Card to a full array
-  if(size == DECK_SIZE){
-    throw invalid_argument("Attempting to return a Card to a full deck");
+  //If you try to add to a full array just don't add it
+  if(size < DECK_SIZE){
+    
+
+    //Put our card back in the queue
+    cards[back] = card;
+
+    //Change our back
+    back = (back + 1) % DECK_SIZE;
+    size++;
   }
 
-  //Put our card back in the queue
-  cards[back] = card;
-
-  //Change our back
-  back = (back + 1) % DECK_SIZE;
-  size++;
+  
 
 }
 
