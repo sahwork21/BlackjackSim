@@ -156,6 +156,9 @@ int main(int argc, char *argv[])
     //Increase the value of our occurences
     occurences[score - 4] += 1;
 
+    deck->returnCard(a);
+    deck->returnCard(b);
+
   }
 
   //Print out our sim results
