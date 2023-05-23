@@ -62,12 +62,14 @@ Card* Deck::dealCard()
   
     //Get the top card
     Card *ret = cards[front];
-  
+    
     //Change our front value and we don't want it to get too large
     front = (front + 1) % DECK_SIZE;
     size--;
     return ret;
   
+    //We can leave the item at its current position since shuffle will be unable to access it
+    //And the return method will replace whatever was at that cards position
 
 
   
@@ -102,15 +104,15 @@ void Deck::shuffleDeck()
   rng.seed(time(0));
 
   //Uniform distribution so we fairly can get from 0 to 51
-  std::uniform_int_distribution<uint32_t> dist(0,51); // range [0,51]
+  std::uniform_int_distribution<uint32_t> dist(front, (size + front) - 1); // range from front to back
   std::uniform_int_distribution<int32_t> roundDist(500, 700);
   
   Card *temp = cards[0];
   int rounds = roundDist(rng);
   //Swap two randomly selected cards 500 to 700 times using the temp pointer
 	for(int i = 0; i < rounds; i++){
-		int a = dist(rng) % 52;
-		int b = dist(rng) % 52;
+		int a = dist(rng) % DECK_SIZE;
+		int b = dist(rng) % DECK_SIZE;
 		
     //Swapping of cards now we just exchange pointers
 		temp = cards[a];
