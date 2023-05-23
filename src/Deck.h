@@ -57,6 +57,9 @@ class Deck
     //Method for shuffling a deck of Cards by randomly swapping two cards
     void shuffleDeck();
 
+    //Returns the number of cards left
+    int getSize() const;
+
 
   
 };

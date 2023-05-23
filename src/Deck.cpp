@@ -22,8 +22,16 @@ Deck::Deck()
 Deck::~Deck()
 {
   for(int i = 0; i < DECK_SIZE; i++){
+    #ifdef TEST
+      std::cout << cards[i] << " Was destroyed" << std::endl;
+    #endif
+
     delete cards[i];
   }
+
+  #ifdef TEST
+    std::cout << "Deck was destroyed" << std::endl;
+  #endif
 }
 
 //Setter for the cards array
@@ -109,6 +117,11 @@ void Deck::shuffleDeck()
 		
 
 	}
+}
+
+int Deck::getSize() const
+{
+  return size;
 }
 
 

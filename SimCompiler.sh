@@ -5,20 +5,20 @@ rm *.o *.exe
 
 #Then we need to create our object then compile
 #Make sure we are checking for successful compilation. It is 0
-g++ -Wall -std=c++17 -g -c Card.cpp -o Card.o
+g++ -Wall -std=c++17 -g -c src/Card.cpp -o Card.o
 if [ $? -ne 0 ]; then
     echo "Failed to make Card object"
     return 1
 fi
 
 
-g++ -Wall -std=c++17 -g -c Deck.cpp -o Deck.o
+g++ -Wall -std=c++17 -g -c src/Deck.cpp -o Deck.o
 if [ $? -ne 0 ]; then
     echo "Failed to make Deck object"
     return 1
 fi
 
-g++ -Wall -std=c++17 -g -c GameSim.cpp -o GameSim.o
+g++ -Wall -std=c++17 -g -c src/GameSim.cpp -o GameSim.o
 if [ $? -ne 0 ]; then
     echo "Failed to make GameSim object"
     return 1
