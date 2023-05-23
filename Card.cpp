@@ -61,7 +61,8 @@ string Card::getSuit() const
 
 std::ostream& operator<<(std::ostream& strm, const Card &card)
 {
-  return strm << card.getName() << "of" << card.getSuit() << " : Value of " << std::to_string(card.getScore());
+  strm << card.name << " of " << card.suit<< ": Value of " << std::to_string(card.score);
+  return strm;
 }
 
 

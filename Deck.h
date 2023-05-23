@@ -35,6 +35,7 @@ class Deck
     Card *cards[52]; //Nobody should be able to access these values through getters
     int front;
     int back;
+    int size;
 
     //Method for setting the Deck of Cards up
     void setCards();

@@ -14,7 +14,8 @@ Deck::Deck()
   setCards();
   front = 0;
   //Back points to the next open spot in the array
-  back = DECK_SIZE;
+  back = 0;
+  size = DECK_SIZE;
 }
 
 //Destructor for a Deck
@@ -48,17 +49,17 @@ Card* Deck::dealCard()
 
   //Need an exception for an empty deck
   //Exception occurs when front = back so we are trying to get from an empty spot
-  if(front % DECK_SIZE == back % DECK_SIZE){
+  if(size == 0){
     throw invalid_argument("Attempting to deal a Card from an empty deck");
   }
 
 
   //Get the top card
-  Card *ret = cards[(++front) % DECK_SIZE];
+  Card *ret = cards[front];
   
   //Change our front value and we don't want it to get too large
-  front %= DECK_SIZE;
-
+  front = (front + 1) % DECK_SIZE;
+  size--;
   return ret;
 
 }
@@ -68,15 +69,16 @@ void Deck::returnCard(Card *card)
 {
 
   //We are trying to return a Card to a full array
-  if(front % DECK_SIZE == back % DECK_SIZE){
-    throw invalid_argument("Attempting to deal a Card from an empty deck");
+  if(size == DECK_SIZE){
+    throw invalid_argument("Attempting to return a Card to a full deck");
   }
 
   //Put our card back in the queue
-  cards[(++back) % 52] = card;
+  cards[back] = card;
 
   //Change our back
-  back %= back;
+  back = (back + 1) % DECK_SIZE;
+  size++;
 
 }
 

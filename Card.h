@@ -49,7 +49,7 @@ class Card
 
     
     //Output stream for a Card object
-    friend std::ostream& operator<<(std::ostream& strm, const Card &card);
+  friend std::ostream& operator<<(std::ostream& strm, const Card &card);
 
   
 
