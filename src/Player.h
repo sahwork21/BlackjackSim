@@ -26,18 +26,21 @@ class Player
     int money;
     //int cardCount;
     bool bust;
-    vector<Card*> *hand;
+    vector<Card*> hand;
   
 
 
   public:
     //Default constructor that gives a definite 500 of inital bettings
     Player();
-    //Parametrized constructor that determines money
-    Player(int money);
 
     //Destructor
     ~Player();
+
+    //Parametrized constructor that determines money
+    Player(int money);
+
+    
 
     //Hit a card
     void hit(Card *c);
@@ -53,12 +56,12 @@ class Player
     int getMoney() const;
     int getCardCount() const;
     bool getBust() const;
-    vector<Card*> *getHand() const; 
+    vector<Card*> getHand() const; 
 
     void setMoney(int money);
 
   //Output stream which the subclasses will have to define later on
-  friend std::ostream & operator<<(std::ostream &os, const Player &player);
+  //friend std::ostream & operator<<(std::ostream &os, const Player &player);
   
 
 

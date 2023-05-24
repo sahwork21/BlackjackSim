@@ -8,6 +8,7 @@
 #include "../src/Player.h"
 #include "../src/Deck.h"
 #include "../src/Card.h"
+#include <iostream>
 
 using std::cout;
 using std::endl;
@@ -17,7 +18,7 @@ using std::invalid_argument;
 int report(int pass, int total)
 {
 
-  cout << "Deck: Passing " << pass << " of " << total << " tests" << endl;
+  cout << "Player: Passing " << pass << " of " << total << " tests" << endl;
   if(pass != total){
     return EXIT_FAILURE;
   }
@@ -38,7 +39,7 @@ int main()
   Player *p = new Player();
 
   //We should have all 0's on fields
-  vector<Card*> *v = p->getHand();
+  vector<Card*> v = p->getHand();
 
   //Assert that reference semantics held and fields are default
   total++;
@@ -78,7 +79,7 @@ int main()
   passing++;
 
   total++;
-  if(v->size() != 0){
+  if(v.size() != 0){
     cerr << "Card size should be 0" << endl;
     delete p;
     
@@ -105,7 +106,7 @@ int main()
 
   //Assert they are the same objects
   total++;
-  if(p->getHand()->at(0) != c){
+  if(p->getHand().at(0) != c){
     cerr << "Wrong card in hand" << endl;
     delete p;
     
@@ -118,7 +119,7 @@ int main()
 
   //Now return it and clear the vector of cards
   total++;
-  d->returnCard(v->at(0));
+  d->returnCard(v.at(0));
 
   //Assert things changed
   if(p->getCardCount() != 0 && d->getSize() != 52){

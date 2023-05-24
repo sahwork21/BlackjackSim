@@ -21,7 +21,6 @@ Player::Player(int money)
   this->score = 0;
   //cardCount = 0;
   this->bust = false;
-  
 }
 
 //We have to destroy our vector and all the cards that may be within it
@@ -40,25 +39,25 @@ Player::~Player()
 
   //Then destroy the vector
   #ifdef TEST
-      std::cout << "Hand vector was destroyed" << std::endl;
-    #endif
-  delete hand;
+      std::cout << "Player was destroyed" << std::endl;
+  #endif
+  
 }
 
 //Just add the card to back and update our fields
 void Player::hit(Card *c)
 {
-  hand->push_back(c);
+  hand.push_back(c);
   score += c->getScore();
   
   //Run some checks to see if the score can be reduced
   //Can convert an ace from 11 to 1
   int i = 0;
-  int count = hand->size();
+  int count = hand.size();
   while(score > 21 && i < count){
     //Check if this is an ace that has reducable set to true
-    if(hand->at(i)->getReducable()){
-      hand->at(i)->reduce();
+    if(hand.at(i)->getReducable()){
+      hand.at(i)->reduce();
       score -= 10;
       //Ace has gone from 11 to 1S
     }
@@ -84,13 +83,13 @@ int Player::getMoney() const
 }
 int Player::getCardCount() const
 {
-  return hand->size();
+  return hand.size();
 }
 bool Player::getBust() const
 {
   return bust;
 }
-vector<Card*> *Player::getHand() const
+vector<Card*> Player::getHand() const
 {
   return hand;
 }
