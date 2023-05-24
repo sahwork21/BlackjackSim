@@ -18,22 +18,30 @@ Player::Player()
 Player::Player(int money)
 {
   setMoney(500);
-  score = 0;
+  this->score = 0;
   //cardCount = 0;
-  bust = false;
-  hand = new std::vector<Card*>();
+  this->bust = false;
+  
 }
 
 //We have to destroy our vector and all the cards that may be within it
 Player::~Player()
 {
   //Destroy all our vector elements
-  int r = hand->size();
-  for(int i = 0; i < r; i++){
-    delete hand->at(i);
-  }
+
+  // int r = hand->size();
+  // for(int i = 0; i < r; i++){
+  //   #ifdef TEST
+  //     std::cout << *(hand->at(i)) << " Was destroyed" << endl;
+  //   #endif
+  //   delete hand->at(i);
+    
+  // }
 
   //Then destroy the vector
+  #ifdef TEST
+      std::cout << "Hand vector was destroyed" << std::endl;
+    #endif
   delete hand;
 }
 

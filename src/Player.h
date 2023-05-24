@@ -10,6 +10,7 @@
 
 #include "Card.h"
 #include <vector>
+#include <stdbool.h>
 
 using std::vector;
 
