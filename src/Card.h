@@ -33,7 +33,7 @@ class Card
     void setScore(int score);
     void setSuit(string suit);
     void setName(string name);
-    
+    void setReducable();
 
   public:
     //Default constructor for Card
@@ -50,7 +50,9 @@ class Card
     string getName() const;
     string toString() const;
 
-    void setReducable();
+    //This is the accessible versions of the reducable field
+    void reduce();    
+    void restoreReduce();
     bool getReducable() const;
 
     

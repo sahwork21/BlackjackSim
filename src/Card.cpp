@@ -63,13 +63,23 @@ string Card::getSuit() const
 //Change our reducable field only valid for aces
 void Card::setReducable()
 {
+  this->reducable = reducable;
   if(name.compare("Ace")){
     reducable = true;
   }
-  else{
-    reducable = false;
-  }
+  
 }
+
+void Card::reduce()
+{
+  reducable = false;
+}
+
+void Card::restoreReduce()
+{
+  reducable = true;
+}
+
 
 bool Card::getReducable() const
 {

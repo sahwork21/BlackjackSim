@@ -11,6 +11,8 @@
 #include "Card.h"
 #include <vector>
 
+using std::vector;
+
 /**
  * PLayer objects contain a score and a collection of cards
  * It also checks if the player has busted or not
@@ -21,9 +23,9 @@ class Player
   private:
     int score;
     int money;
-    int cardCount;
+    //int cardCount;
     bool bust;
-    std::vector<Card*> *hand;
+    vector<Card*> *hand;
   
 
 
@@ -40,7 +42,7 @@ class Player
     void hit(Card *c);
 
     //Clear the hand and send our cards back to the deck
-    void clear();
+    //void clear();
 
     //Make a bet that will be done soon
     //void bet(int bet);
@@ -50,7 +52,7 @@ class Player
     int getMoney() const;
     int getCardCount() const;
     bool getBust() const;
-    std::vector<Card*>& getHand() const; 
+    vector<Card*> *getHand() const; 
 
     void setMoney(int money);
 

@@ -7,6 +7,8 @@
 
 #include "Player.h"
 
+
+
 //Default constructor sets us up with 500 money
 Player::Player()
 {
@@ -17,7 +19,7 @@ Player::Player(int money)
 {
   setMoney(500);
   score = 0;
-  cardCount = 0;
+  //cardCount = 0;
   bust = false;
   hand = new std::vector<Card*>();
 }
@@ -40,11 +42,54 @@ void Player::hit(Card *c)
 {
   hand->push_back(c);
   score += c->getScore();
-
+  
   //Run some checks to see if the score can be reduced
   //Can convert an ace from 11 to 1
-  if(){
-
+  int i = 0;
+  int count = hand->size();
+  while(score > 21 && i < count){
+    //Check if this is an ace that has reducable set to true
+    if(hand->at(i)->getReducable()){
+      hand->at(i)->reduce();
+      score -= 10;
+      //Ace has gone from 11 to 1S
+    }
+    i++;
   }
-  
+
+  //If we couldn't reduce our score you have gone bust
+  if(score > 21){
+    bust = true;
+  }
+
 }
+
+//Clear our vector of the card pointers since we don't need the container
+
+int Player::getScore() const
+{
+  return score;
+}
+int Player::getMoney() const
+{
+  return money;
+}
+int Player::getCardCount() const
+{
+  return hand->size();
+}
+bool Player::getBust() const
+{
+  return bust;
+}
+vector<Card*> *Player::getHand() const
+{
+  return hand;
+}
+
+void Player::setMoney(int money)
+{
+  this->money = money;
+}
+
+//std::ostream & operator<<(std::ostream &os, const Player &player);
