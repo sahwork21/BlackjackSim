@@ -35,7 +35,16 @@ Player::~Player()
   delete hand;
 }
 
-Player::hit()
+//Just add the card to back and update our fields
+void Player::hit(Card *c)
 {
+  hand->push_back(c);
+  score += c->getScore();
+
+  //Run some checks to see if the score can be reduced
+  //Can convert an ace from 11 to 1
+  if(){
+
+  }
   
 }

@@ -26,11 +26,14 @@ class Card
     int score;
     string suit;
     string name;
+    //If the card can be reduced this should be true
+    bool reducable;
 
     //Setters are private since a Card's fields should be immutable
     void setScore(int score);
     void setSuit(string suit);
     void setName(string name);
+    
 
   public:
     //Default constructor for Card
@@ -46,6 +49,9 @@ class Card
     string getSuit() const;
     string getName() const;
     string toString() const;
+
+    void setReducable();
+    bool getReducable() const;
 
     
     //Output stream for a Card object

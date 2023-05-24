@@ -36,6 +36,7 @@ Card::Card(int score, string suit, string name)
   setScore(score);  
   setName(name);
   setSuit(suit);
+  setReducable();
 }
 
 Card::~Card()
@@ -58,6 +59,23 @@ string Card::getSuit() const
 {
   return suit;
 }
+
+//Change our reducable field only valid for aces
+void Card::setReducable()
+{
+  if(name.compare("Ace")){
+    reducable = true;
+  }
+  else{
+    reducable = false;
+  }
+}
+
+bool Card::getReducable() const
+{
+  return reducable;
+}
+
 
 std::ostream& operator<<(std::ostream& strm, const Card &card)
 {
