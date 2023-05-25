@@ -15,7 +15,7 @@ using std::endl;
 using std::cerr;
 using std::invalid_argument;
 //Reports how many of the cases are passes
-int report(int pass, int total)
+static int report(int total, int pass)
 {
 
   cout << "Player: Passing " << pass << " of " << total << " tests" << endl;
@@ -39,125 +39,216 @@ int main()
   Player *p = new Player();
 
   //We should have all 0's on fields
-  vector<Card*> v = p->getHand();
+  //vector<Card*> v = p->getHand();
 
   //Assert that reference semantics held and fields are default
   total++;
-  if(p->getBust() != false){
-    cerr << "Bust should start out as false" << endl;
+  if(p->getBust()){
+    cerr << "Player should not start in a bust position" << endl;
     delete p;
     
-    report(total, passing);
+    exit(report(total, passing));
   }
   passing++;
 
-  total++;
-  if(p->getCardCount() != 0){
-    cerr << "Card count should start as 0" << endl;
-    delete p;
-    
-    report(total, passing);
-  }
-  passing++;
-
-  total++;
-  if(p->getMoney() != 500){
-    cerr << "Default construction should set money to 500" << endl;
-    delete p;
-    
-    report(total, passing);
-  }
-  passing++;
-
+  //Score should start at 0
   total++;
   if(p->getScore() != 0){
-    cerr << "Score should start as 0" << endl;
+    cerr << "Player should start at a score of 0" << endl;
     delete p;
-    
-    report(total, passing);
+
+    exit(report(total, passing));
   }
   passing++;
 
+  //We should start with an empty vector
   total++;
-  if(v.size() != 0){
-    cerr << "Card size should be 0" << endl;
+  if(p->getHandCopy().size() != 0){
+    cerr << "Player should start with an empty vector" << endl;
     delete p;
-    
-    report(total, passing);
-  }
-  passing++;
 
-
-  //Create a deck and see if we can properly transfer some cards around
-  Deck *d = new Deck();
-  Card *c = d->dealCard();
-  p->hit(c);
-
-  //See if things did in fact change
-  total++;
-  if(p->getCardCount() != 1 && d->getSize() != 51){
-    cerr << "There should be a card in the hand now and 51 in the deck" << endl;
-    delete p;
-    
-    delete d;
-    report(total, passing);
-  }
-  passing++;
-
-  //Assert they are the same objects
-  total++;
-  if(p->getHand().at(0) != c){
-    cerr << "Wrong card in hand" << endl;
-    delete p;
-    
-    delete d;
-    report(total, passing);
+    exit(report(total, passing));
   }
   passing++;
 
   
 
-  //Now return it and clear the vector of cards
-  total++;
-  d->returnCard(v.at(0));
+  //Now try putting some cards in the hand
+  Card *c1 = new Card(11, "Spades", "Ace");
+  Card *c2 = new Card(10, "Spades", "Ten");
+  Card *c3 = new Card(11, "Hearts", "Ace");
+  Card *c4 = new Card(10, "Hearts", "Ten");
 
-  //Assert things changed
-  if(p->getCardCount() != 0 && d->getSize() != 52){
-    cerr << "Failed to return card back to deck" << endl;
+
+  p->hitCard(c1);
+  p->hitCard(c2);
+
+  //Add an ace and ten to get to 21
+  total++;
+  if(p->getHandCopy().size() != 2){
+    cerr << "Player should have 2 cards now" << endl;
     delete p;
-    
-    delete d;
-    report(total, passing);
+
+    exit(report(total, passing));
+  }
+
+  if(p->getBust()){
+    cerr << "Player should not be bust right now" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+
+  cout << p->getScore() << endl;
+  if(p->getScore() != 21){
+    cerr << "Player should have 21 right now" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+  
+
+  //Also assert our ace has not been reduced
+  cout << "Ace reducable is " << p->getHandCopy()[0]->getReducable() << endl;
+  if(!p->getHandCopy()[0]->getReducable()){
+    cerr << "First ace should not be reduced" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+
+  //And our ten should not be reducable
+  cout << "Ten reducable is " << p->getHandCopy()[1]->getReducable() << endl;
+  if(p->getHandCopy()[1]->getReducable()){
+    cerr << "First Ten should be reduced" << endl;
+    delete p;
+
+    exit(report(total, passing));
   }
   passing++;
 
-  //Let's try and go bust
-  int i = 0;
-  while(p->getBust()){
-    p->hit(d->dealCard());
-    i++;
+
+  //Now go over the limit with another ace to get score to 12
+  total++;
+  p->hitCard(c3);
+  if(p->getHandCopy().size() != 3){
+    cerr << "Player should have 3 cards now" << endl;
+    delete p;
+
+    exit(report(total, passing));
   }
 
-  //Assert sizes did in fact change
-  total++;
-  if(p->getCardCount() != i && d->getSize() != 52 - i){
-    cerr << "Couldn't update sizes over a series of ops" << endl;
+  if(p->getBust()){
+    cerr << "Player should not be bust right now" << endl;
     delete p;
-   
-    delete d;
-    report(total, passing);
+
+    exit(report(total, passing));
+  }
+
+  cout << p->getScore() << endl;
+  if(p->getScore() != 12){
+    cerr << "Player should have 12 right now" << endl;
+    delete p;
+
+    exit(report(total, passing));
   }
   passing++;
 
-  //Now destroy everything
+  //Assert our aces have been reduced
 
-  delete c;
+  total++;
+  cout << "Ace reducable is " << p->getHandCopy()[0]->getReducable() << endl;
+  cout << "Ten reducable is " << p->getHandCopy()[1]->getReducable() << endl;
+  cout << "Ace reducable is " << p->getHandCopy()[2]->getReducable() << endl;
+  if(p->getHandCopy()[0]->getReducable() || p->getHandCopy()[1]->getReducable() || p->getHandCopy()[2]->getReducable()){
+    cerr << "Player should have no reducable cards" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+  passing++;
+
+
+  //Now go bust by adding a ten
+  total++;
+  p->hitCard(c4);
+  if(p->getHandCopy().size() != 4){
+    cerr << "Player should have 4 cards now" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+
+  if(!p->getBust()){
+    cerr << "Player should be bust right now" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+
+  cout << p->getScore() << endl;
+  if(p->getScore() != 22){
+    cerr << "Player should have 22 and bust right now" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+  passing++;
+
+  //Now lets return all of our cards
+
+  total++;
+  //Just pull them out of the array and see if things have changed
+  //Only the vector hand should change not other stuff since this is the last action in a game
+  p->returnHand();
+  
+
+  //All the aces should now be reduced
+  cout << "Ace reducable is " << c1->getReducable() << endl;
+  cout << "Ten reducable is " << c2->getReducable() << endl;
+  cout << "Ace reducable is " << c3->getReducable() << endl;
+  cout << "Ten reducable is " << c4->getReducable() << endl;
+  if(!c1->getReducable() || c2->getReducable() || !c3->getReducable() || c4->getReducable()){
+    cerr << "Player should have aces as reducable cards" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+
+  
+
+  //Should have 0 cards now
+  if(p->getHandCopy().size() != 0){
+    cerr << "Player should have 0 cards now" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+
+  if(p->getScore() !=0){
+    cerr << "Player should have 0 score right now" << endl;
+    delete p;
+
+    exit(report(total, passing));
+  }
+
+
+  passing++;
+
+
+
+
+
+
+
+  
   delete p;
+  delete c1;
+  delete c2;
+  delete c3;
+  delete c4;
 
-  
-
-
-  report(passing, total);
+  exit(report(total, passing));
   
 
 

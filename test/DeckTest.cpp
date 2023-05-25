@@ -15,7 +15,7 @@ using std::endl;
 using std::cerr;
 using std::invalid_argument;
 //Reports how many of the cases are passes
-int report(int pass, int total)
+static int report(int pass, int total)
 {
 
   cout << "Deck: Passing " << pass << " of " << total << " tests" << endl;

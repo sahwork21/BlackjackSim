@@ -29,6 +29,8 @@ Deck::~Deck()
     delete cards[i];
   }
 
+
+
   #ifdef TEST
     std::cout << "Deck was destroyed" << std::endl;
   #endif

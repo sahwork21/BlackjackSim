@@ -10,7 +10,7 @@
 
 #include "Card.h"
 #include <vector>
-#include <stdbool.h>
+
 
 using std::vector;
 
@@ -20,50 +20,27 @@ using std::vector;
  */
 class Player
 {
-  //Fields are the score, money, have they gone bust, and their hand of cards
+  //Should have a score and hand everything else can just be calculated
   private:
     int score;
-    int money;
-    //int cardCount;
-    bool bust;
     vector<Card*> hand;
   
-
-
   public:
-    //Default constructor that gives a definite 500 of inital bettings
+    //Constructors
     Player();
-
-    //Destructor
+    //Destructor has to do nothing since new was never called
     ~Player();
-
-    //Parametrized constructor that determines money
-    Player(int money);
 
     
 
-    //Hit a card
-    void hit(Card *c);
-
-    //Clear the hand and send our cards back to the deck
-    //void clear();
-
-    //Make a bet that will be done soon
-    //void bet(int bet);
-
-    //Getters and Setters
     int getScore() const;
-    int getMoney() const;
-    int getCardCount() const;
     bool getBust() const;
-    vector<Card*> getHand() const; 
+    vector<Card*> getHandCopy() const;
 
-    void setMoney(int money);
+    //Method to add a card to the hand
+    void hitCard(Card* c);
 
-  //Output stream which the subclasses will have to define later on
-  //friend std::ostream & operator<<(std::ostream &os, const Player &player);
-  
-
+    void returnHand();
 
 };
 
