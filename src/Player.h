@@ -20,6 +20,7 @@ using std::vector;
  */
 class Player
 {
+  friend std::ostream & operator<<(std::ostream &os, const Player &player);
   //Should have a score and hand everything else can just be calculated
   private:
     int score;
@@ -41,6 +42,8 @@ class Player
     void hitCard(Card* c);
 
     void returnHand();
+
+  
 
 };
 

@@ -169,6 +169,12 @@ int main()
   passing++;
 
 
+  //Assert our toString works
+  cout << *p << endl;
+
+
+
+
   //Now go bust by adding a ten
   total++;
   p->hitCard(c4);

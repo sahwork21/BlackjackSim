@@ -85,4 +85,16 @@ void Player::returnHand()
 }
 
 
-//std::ostream & operator<<(std::ostream &os, const Player &player);
+std::ostream& operator<< (std::ostream &os, const Player &player)
+{
+  os << "Player has a score of " << player.score << std::endl << "Player has: " << std::endl;
+
+  //List out all the cards we have
+  int len = player.hand.size();
+  for(int i = 0; i < len; i++){
+    os << player.hand[i]->getName() << " of " << player.hand[i]->getSuit() << std::endl;
+  }
+
+  return os;
+
+}
