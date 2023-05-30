@@ -12,7 +12,7 @@
 //Default constructor sets
 Player::Player()
 {
-  score = 0;
+  setScore(0);
   
 }
 
@@ -22,6 +22,11 @@ Player::~Player()
   #ifdef TEST
     std::cout << "Player destroyed" << std::endl;
   #endif
+}
+
+void Player::setScore(int score)
+{
+  this->score = score;
 }
 
 int Player::getScore() const

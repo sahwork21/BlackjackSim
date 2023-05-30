@@ -33,7 +33,7 @@ class Player
     ~Player();
 
     
-
+    void setScore(int score);
     int getScore() const;
     bool getBust() const;
     vector<Card*> getHandCopy() const;
