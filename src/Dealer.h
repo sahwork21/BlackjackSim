@@ -13,6 +13,9 @@
 
 class Dealer: public Player
 {
+
+  friend std::ostream& operator<< (std::ostream &os, const Player &d);
+
   public:
     Dealer();
     ~Dealer();
