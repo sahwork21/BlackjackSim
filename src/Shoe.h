@@ -19,6 +19,10 @@ class Shoe
   //In real black jack games you can just ask or guess based on height
   private: 
     int deckCount;
+
+    //Start as false until -1 is pulled from the wash
+    bool reshuffle;
+
     //We have a vector of decks that we will shuffle and then wash together into a queue
     vector<Deck*> decks;
 
@@ -42,12 +46,20 @@ class Shoe
 
     //Getters and setters
     void setDeckCount(int deckCount);
+    void setReshuffle();
     int getDeckCount() const;
+    bool getReshuffle() const;
+    //Construct the deck with the an origin
     void setDecks();
+
+
+    //Set up our wash of ints
+    void setWash();
 
     //Method to place the card in the deck randomly
     //Needs to be done after shuffling decks and washing the cards together
     void setReshuffleCard();
+
 
 
     //We shuffle each deck of cards place them in the wash then shuffle that up
@@ -55,6 +67,15 @@ class Shoe
 
 
     //We need to be able to deal cards and give them back to us
+    //Just draw from the front and send to back
+    //Enevtually we will find the reshuffle card
+    int dealFromWash();
+
+    //Deal from the right deck based on origin
+    Card* dealFromDecks(int origin);
+
+    //Return a card with the correct origin
+    void returnCard(Card *card, int origin);
 
 
 

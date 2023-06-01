@@ -11,7 +11,7 @@
 //Default Constructor setting money to 500
 Better::Better()
 {
-  Better(500);
+  setMoney(500);
 }
 
 Better::Better(int money)
@@ -32,7 +32,7 @@ void Better::setMoney(int money)
   this->money = money;
 }
 
-int Better::getMoney()
+int Better::getMoney() const
 {
   return money;
 }

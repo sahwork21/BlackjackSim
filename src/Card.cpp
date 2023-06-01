@@ -38,7 +38,11 @@ void Card::setOrigin(int origin)
 //Parametrized constructor for a singular, stand-alone deck
 Card::Card(int score, string suit, string name)
 {
-  Card(score, suit, name, 0);
+  setScore(score);  
+  setName(name);
+  setSuit(suit);
+  setReducable();
+  setOrigin(0);
 }
 
 
