@@ -24,7 +24,7 @@ class Better: public Player
 
     //Setters and getters for money and checks for bankruptcy
     void setMoney(int money);
-    int getMoney();
+    int getMoney() const;
 
     bool checkBankruptcy();
 

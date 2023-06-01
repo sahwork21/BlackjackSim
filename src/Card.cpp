@@ -11,7 +11,7 @@
 //Our default constructor should really never be called
 Card::Card()
 {
-  Card(0, "", "");
+  Card(0, "", "", 0);
 }
 
 void Card::setScore(int score)
@@ -29,14 +29,27 @@ void Card::setSuit(string suit)
   this->suit = suit;
 }
 
+void Card::setOrigin(int origin)
+{
+  this->origin = origin;
+}
 
-// Parametrized constructor
+
+//Parametrized constructor for a singular, stand-alone deck
 Card::Card(int score, string suit, string name)
+{
+  Card(score, suit, name, 0);
+}
+
+
+// Parametrized constructor for a card in a shoe
+Card::Card(int score, string suit, string name, int origin)
 {
   setScore(score);  
   setName(name);
   setSuit(suit);
   setReducable();
+  setOrigin(origin);
 }
 
 Card::~Card()
@@ -58,6 +71,11 @@ string Card::getName() const
 string Card::getSuit() const
 {
   return suit;
+}
+
+int Card::getOrigin() const
+{
+  return origin;
 }
 
 //Change our reducable field only valid for aces
