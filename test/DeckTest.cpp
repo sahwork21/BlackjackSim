@@ -165,13 +165,38 @@ int main()
   passing++;
 
 
+
+  //Make sure our cards and origins are correct
+  total++;
+  if(d->getOrigin() != 0 && d->dealCard()->getOrigin() != 0){
+    //We failed
+    cerr << "Failed to have an origin of 0 default" << endl;
+    delete d;
+    report(passing, total);
+  }
+  passing++;
+
+
+  //Check the construction works
+  Deck *d2 = new Deck(15);
+  total++;
+  if(d2->getOrigin() != 15 && d2->dealCard()->getOrigin() != 15){
+    //We failed
+    cerr << "Failed to have an origin of 15 that needed to be set" << endl;
+    delete d;
+    delete d2;
+    report(passing, total);
+  }
+  passing++;
   
+
+
 
 
   //Now check that destruction works properly
   //Has to be done by the programmor since I don't want to dup2 and read a file
   delete d;
-
+  delete d2;
 
 
 

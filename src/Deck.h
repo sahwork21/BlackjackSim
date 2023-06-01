@@ -37,15 +37,26 @@ class Deck
     int back;
     int size;
 
+    //We have our origin identifier to help make a Card
+    int origin;
+
     //Method for setting the Deck of Cards up
     void setCards();
+
+    
 
   public:
     //Constructor for the deck of cards
     Deck();
 
+    //Constructor for making a deck with tracable origins 
+    Deck(int origin);
+
     //Destructor for the deck of cards that needs to delete all its cards
     ~Deck();
+
+    
+
 
     //Deal method that removes from the front of the queue
     Card *dealCard();
@@ -59,6 +70,10 @@ class Deck
 
     //Returns the number of cards left
     int getSize() const;
+
+    //Set and get the origin int
+    int getOrigin() const;
+    void setOrigin(int origin);
 
 
   
