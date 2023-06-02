@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     int score = a->getScore() + b->getScore();
     
     //If we got a 22 just change score to a 12 as one ace become a 1s
-    if(score == 22 && (a->getName().compare("Ace") || b->getName().compare("Ace"))){
+    if(score == 22 && (a->getName().compare("Ace") ==0 || b->getName().compare("Ace")) ==0){
       score = 12;
     }
 

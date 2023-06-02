@@ -7,15 +7,27 @@
 
 
 
-//Constructor for a Deck
+//Default constructor
 Deck::Deck()
 {
-  
+  setOrigin(0);
   setCards();
   front = 0;
   //Back points to the next open spot in the array
   back = 0;
   size = DECK_SIZE;
+}
+
+//Constructor for a Deck
+Deck::Deck(int origin)
+{
+  setOrigin(origin);
+  setCards();
+  front = 0;
+  //Back points to the next open spot in the array
+  back = 0;
+  size = DECK_SIZE;
+ 
 }
 
 //Destructor for a Deck
@@ -28,6 +40,8 @@ Deck::~Deck()
 
     delete cards[i];
   }
+
+
 
   #ifdef TEST
     std::cout << "Deck was destroyed" << std::endl;
@@ -44,8 +58,8 @@ void Deck::setCards()
 	int CardValue[13] = { 11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10 };
   for(int i = 0; i < 4; i++){
     for(int j = 0; j < 13; j++){
-      //Construct our Card here
-      cards[cardCount] = new Card(CardValue[j], suits[i], names[j]);
+      //Construct our Card here with the correct origin
+      cards[cardCount] = new Card(CardValue[j], suits[i], names[j], getOrigin());
       cardCount++;
     }
   }
@@ -128,6 +142,16 @@ void Deck::shuffleDeck()
 int Deck::getSize() const
 {
   return size;
+}
+
+int Deck::getOrigin() const
+{
+  return origin;
+}
+
+void Deck::setOrigin(int origin)
+{
+  this->origin = origin;
 }
 
 

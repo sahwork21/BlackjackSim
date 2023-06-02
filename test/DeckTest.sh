@@ -1,5 +1,5 @@
 #!/bin/bash
-rm *.exe
+rm DeckTest.exe
 
 #Compile the tester with TEST flag set
 g++ -Wall -std=c++17 -g DeckTest.cpp ../src/Deck.cpp ../src/Card.cpp -o DeckTest -DTEST
