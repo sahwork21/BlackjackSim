@@ -89,7 +89,7 @@ int main()
 
 
     //Ace of diamonds check
-    if(c->getName().compare("Ace") == 0 && c->getOrigin() == 0 && c->getSuit().compare("Diamonds")){
+    if(c->getName().compare("Ace") == 0 && c->getOrigin() == 0 && c->getSuit().compare("Diamonds") == 0){
       cerr << "We drew the whole deck without getting the reshuffle card" << endl;
       delete s;
       delete s2;
@@ -97,7 +97,7 @@ int main()
     }
     s2->returnCard(c, c->getOrigin());
   }
-  total++;
+  passing++;
   
 
   //Let's just check if shuffling works

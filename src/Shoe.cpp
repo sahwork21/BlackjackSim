@@ -18,6 +18,9 @@ Shoe::Shoe()
 
 Shoe::Shoe(int decks)
 {
+  if(decks > 8){
+    throw std::invalid_argument("Deck count cannot exceed 8");
+  }
   setReshuffle();
   setDeckCount(decks);
 
@@ -40,33 +43,36 @@ Shoe::~Shoe()
 }
 
 
-
-
-//Generate a deck after we know how many decks to make
+//Generate all of our decks when constructing
 void Shoe::setDecks()
 {
   for(int i = 0; i < deckCount; i++){
-    //Construct with the righ origin
-    decks.push_back(new Deck(i));
+    decks[i] = new Deck(i);
   }
 }
+
+
 
 //Set ourself up with 15 instances of each number
 void Shoe::setWash()
 {
   for(int i = 0; i < deckCount; i++){
-    for(int i = 0; i < DECK_SIZE; i++){
+    for(int j = 0; j < DECK_SIZE; j++){
       wash.push_back(i);
     }
   }
 }
 
-//Insert the card around 25% into the deck like a real shoe does
+
+
+
+
+//Insert the card around 75% into the deck like a real shoe does
 void Shoe::setReshuffleCard()
 {
   std::mt19937 rng;   
   rng.seed(time(0));
-  std::uniform_int_distribution<uint32_t> dist(.20 * DECK_SIZE * deckCount, .30 * DECK_SIZE * deckCount); // ranges from 20 to 30 % into the wash
+  std::uniform_int_distribution<uint32_t> dist( DECK_SIZE * deckCount * .72,  DECK_SIZE * deckCount * .77); // ranges from 72 to 77 % into the wash
 
   
 
