@@ -18,7 +18,7 @@ Shoe::Shoe()
 
 Shoe::Shoe(int decks)
 {
-  if(decks > 8){
+  if(decks > 8 || decks < 1){
     throw std::invalid_argument("Deck count cannot exceed 8");
   }
   setReshuffle();
