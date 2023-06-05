@@ -104,7 +104,19 @@ int main()
   //Print out ten cards that were shuffled up
 
   
+  //Let's try to shuffle up s2 and retry this test
+  s2->washDecks();
+  s2->setReshuffleCard();
 
+  total++;
+  while(!s2->getReshuffle()){
+    c = s2->dealCard();
+    cout << *c << endl;
+
+
+    
+  }
+  passing++;
 
 
   delete s;
