@@ -1,5 +1,6 @@
 #!/bin/bash
 rm Table.exe
+rm *.o
 
 # Compile the objects and then throw them all together
 #Make sure we are checking for successful compilation. It is 0
@@ -47,14 +48,14 @@ fi
 
 
 #Finally compile our Table object
-g++ -Wall -std=c++17 -g -c src/Table.cpp -o Table.o
+g++ -Wall -std=c++17 -g -c src/Table.cpp -o Table.o -DWINDOWS
 if [ $? -ne 0 ]; then
     echo "Failed to make Table object"
     exit 1
 fi
 
 #Finally compile our executable
-g++ -Wall -std=c++17 -g Table.o Shoe.o Dealer.o Better.o Deck.o Card.o Player.o -o Table
+g++ -Wall -std=c++17 -g Table.o Shoe.o Dealer.o Better.o Deck.o Card.o Player.o -o Table -DWINDOWS
 
 
 #Check that what we compiled is there or not

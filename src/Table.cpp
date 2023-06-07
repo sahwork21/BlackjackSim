@@ -148,7 +148,7 @@ int main()
 
     //Ask for bets if we have a better
     int bet = 0;
-    if(option == 'y'){
+    if(player.type == BetterType){
 
       cout << "How much do you want to bet?" << endl;
       
@@ -221,28 +221,37 @@ int main()
     Sleep(3000);
 
 
-    //If either party has a blackjack goto END label
-    if(player.type == BetterType){
-      if(player.better->getScore() == 21){
-        goto BLACKJACK;
-      }
-    }
-    else{
-      if(player.player->getScore() == 21){
-        goto BLACKJACK;
-      }   
-    }
-    if(dealer->getScore() == 21){
-      goto BLACKJACK;
-    }
+    
     
     
 
     //Ask the player to hit or stand
-    char action = '\0';
+    char action = 's';
     do{
-      cout << "Do you want to [h]it or [s]tand?" << endl;
-      cin >> action;
+      //If they have 21 off the bat we won't even give them an action they will stand
+      if(player.type == BetterType){
+        if(player.better->getScore() == 21){
+          action = 's';
+          cout << "You have a score of 21" << endl;
+        }
+        else{
+          cout << "Do you want to [h]it or [s]tand?" << endl;
+          cin >> action;
+        }
+      }
+      else{
+        if(player.player->getScore() == 21){
+          action = 's';
+          cout << "You have a score of 21" << endl;
+        }
+        else{
+          cout << "Do you want to [h]it or [s]tand?" << endl;
+          cin >> action;
+        }
+      }
+
+
+      
 
       //If it's hit do as the person says
       if(action == 'h'){
@@ -329,7 +338,7 @@ int main()
 
     //Now compare and make a decision
     //This goto label is for if a black jack occurs
-    BLACKJACK:
+    
 
     if(player.type == BetterType){
       //Path if the player has busted
@@ -392,7 +401,7 @@ int main()
 
 
       //Return cards to the shoe
-      int len = player.better->getHandCopy().size();
+      len = player.better->getHandCopy().size();
       for(int i = 0; i < len; i++){
         shoe->returnCard(player.better->getHandCopy()[i], player.better->getHandCopy()[i]->getOrigin());
       }
@@ -452,7 +461,7 @@ int main()
           
         }
       }
-      int len = player.player->getHandCopy().size();
+      len = player.player->getHandCopy().size();
       for(int i = 0; i < len; i++){
         shoe->returnCard(player.player->getHandCopy()[i], player.player->getHandCopy()[i]->getOrigin());
       }
@@ -461,7 +470,7 @@ int main()
 
 
     //Empty out our dealer's hands
-    int len = dealer->getHandCopy().size();
+    len = dealer->getHandCopy().size();
     for(int i = 0; i < len; i++){
       shoe->returnCard(dealer->getHandCopy()[i], dealer->getHandCopy()[i]->getOrigin());
     }
@@ -502,7 +511,7 @@ int main()
   //Delete all our new objects
   delete shoe;  
 
-  if(option == 'y'){
+  if(player.type == BetterType){
     delete player.better;
   }
   else{

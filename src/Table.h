@@ -8,8 +8,17 @@
 #include "Better.h"
 #include "Player.h"
 #include <iostream>
+//Windows compilation
+#ifdef WINDOWS
 #include <Windows.h>
+#endif
+
+//If You use linux use this and not windows or sleep may not work
+#ifdef LINUX
+#include <unistd.h>
+#endif
 #include <csignal>
+#include <limits.h>
 
 //Methods needed for verifying input
 using std::getline;
