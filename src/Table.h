@@ -11,6 +11,10 @@
 #include <Windows.h>
 #include <csignal>
 
+//Methods needed for verifying input
+using std::getline;
+using std::stoi;
+
 
 //Enum that detemines what type of user we have
 typedef enum {PlayerType, BetterType} UserType;
@@ -30,4 +34,7 @@ typedef struct UserStruct
 
 //These are a bunch of methods that will do some of the actions for a user
 //Just hit cards and stuff depending on what object is in the union
-void hitUser(User user, Card *c);
+void hitUser(User *user, Card *c);
+
+//Print out what our user has
+void printHand(User *user);

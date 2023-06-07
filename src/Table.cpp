@@ -16,12 +16,28 @@ using std::endl;
 
 
 //This will be our handles for hitting and returning stuff so we don't have to wait so long
-void hitUser(User user, Card *c)
+void hitUser(User *user, Card *c)
 {
   //Just hit depending on what is filling our union
-  if(){
-    user.better->hitCard(c);
+  if(user->type == BetterType){
+    user->better->hitCard(c);
   } 
+  else{
+    user->player->hitCard(c);
+  }
+}
+
+void printHand(User *user)
+{
+  cout << "You have a " << endl;
+  if(user->type == BetterType){
+    cout << user->better->getScore() << " with a: " << endl; 
+    cout << *(user->better->getHandCopy()[0]) << endl << *(user->better->getHandCopy()[1]) << endl;
+  } 
+  else{
+    cout << user->player->getScore() << " with a: " << endl; 
+    cout << *(user->player->getHandCopy()[0]) << endl << *(user->player->getHandCopy()[1]) << endl;
+  }
 }
 
 
@@ -84,10 +100,11 @@ int main()
   //If it's a y make a better. n make a player
   User player;
   if(option == 'y'){
-
+    player.type = BetterType;
     player.better = new Better();
   }
   else{
+    player.type = PlayerType;
     player.player = new Player();
    
   }
@@ -117,32 +134,121 @@ int main()
     if(option == 'y'){
 
       cout << "How much do you want to bet?" << endl;
-      int bet;
-      cin >> bet;
+      int bet = 0;
+
+      string line;
+      int temp = 0;
+      //Make sure they actually put in valid bets
+      do{
+        getline(cin, line);
+
+        //Just use stoi and check we have reached a return case after
+        temp = stoi(line);
+
+        //Make sure we have entered a new line 
+        char nextC;
+        cin.get(nextC);
+
+        //Need to either be a \r or \n
+        if(nextC == '\r'){
+          cin.get(nextC);
+          if(nextC == '\n'){
+            bet = temp;
+          }
+        }
+        else if(nextC  == '\n' || nextC  == EOF){
+          bet = temp;
+        }
+        
+
+        //Flush input then deal our cards out
+        cin.clear();
+        //Ignore all the characters until an EOF
+        cin.ignore(INT_MAX);
+
+      } while (bet != 0);
+
+      
+
       bool cont = player.better->makeBet(bet);
       //Deal our cards to player then dealer
       Sleep(1000);
-      cout << "Dealing Cards" << endl;
-      player.better->hitCard(shoe->dealCard());
-      player.better->hitCard(shoe->dealCard());
-
-      dealer->hitCard(shoe->dealCard());
-      dealer->hitCard(shoe->dealCard());
-      Sleep(3000);
       
-      //Tell them what we have
+      
     }
-    else{
-      //Deal our cards to player then dealer
-      Sleep(1000);
-      cout << "Dealing Cards" << endl;
-      player.player->hitCard(shoe->dealCard());
-      player.player->hitCard(shoe->dealCard());
 
-      dealer->hitCard(shoe->dealCard());
-      dealer->hitCard(shoe->dealCard());
-      Sleep(3000);
-    }
+    cout << "Dealing Cards" << endl;
+    hitUser(&player, shoe->dealCard());
+    dealer->hitCard(shoe->dealCard());
+    hitUser(&player, shoe->dealCard());
+    dealer->hitCard(shoe->dealCard());
+    Sleep(3000);
+
+    //Print out what they have
+    printHand(&player);
+    Sleep(2000);
+    //Print out the dealer's hole card card 2
+    cout << "The dealer has a " << *(dealer->getHandCopy()[1]) << endl;
+    Sleep(3000);
+    
+
+    //Ask the player to hit or stand
+    char action = '\0';
+    do{
+      cout << "Do you want to [h]it or [s]tand?" << endl;
+      cin >> action;
+
+      //If it's hit do as the person says
+      if(action == 'h'){
+        Card *c = shoe->dealCard();
+        hitUser(&player, c);
+        
+        cout << "Dealing card" << endl;
+        Sleep(1000);
+        cout << "You got a " << *c << endl;
+        Sleep(1000);
+
+        //Tell them what their hand is at now and then bust them if needed
+        //If they have reached a 21 or busted they will exit this state
+        if(player.type == BetterType){
+          cout << "You have a score of " << player.better->getScore() << endl;
+          Sleep(1000);
+          if(player.better->getScore() == 21){
+            action = 's';
+          }
+          if(player.better->getBust()){
+            action = 's';
+            cout << "You have gone bust" << endl;
+          }
+        }
+        else{
+          cout << "You have a score of " << player.player->getScore() << endl;
+          Sleep(1000);
+          if(player.player->getScore() == 21){
+            action = 's';
+          }
+          if(player.player->getBust()){
+            action = 's';
+            cout << "You have gone bust" << endl;
+          }
+        } 
+
+      }
+      //Otherwise it's some invlaid char
+      else if(action != 's' && action != 'h'){
+        cout << "Make sure to enter a valid character" << endl;
+      }
+      cin.clear();
+      cin.ignore(INT_MAX);
+      Sleep(500);
+
+    }while(action != 's');
+
+
+
+    
+      
+    
 
     
     
