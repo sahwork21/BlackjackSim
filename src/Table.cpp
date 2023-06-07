@@ -14,6 +14,11 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+void foundReshuffle()
+{
+  cout << "Reshuffle card has been drawn. The shoe will be reshuffled after this hand" << endl;
+  Sleep(2000);
+}
 
 //This will be our handles for hitting and returning stuff so we don't have to wait so long
 void hitUser(User *user, Card *c)
@@ -64,6 +69,7 @@ int main()
   //Keep our wins and hands played
   int played = 0;
   int wins = 0;
+  int ties = 0;
 
 
   //Ask how many decks we should have in our shoe
@@ -117,6 +123,16 @@ int main()
   Sleep(3000);
   //Keep playing until the flag is turned off
   while(contFlag){
+
+
+    //Whenever we draw the reshuffle dummy card we need to tell the user
+    if(shoe->getReshuffle()){
+      cout << "Shuffling the Shoe" << endl;
+      shoe->washDecks();
+      shoe->setReshuffleCard();
+    }
+    Sleep(5000);
+
     cout << "Remember to do ctrl^C to end the game" << endl;
     Sleep(3000);
 
@@ -131,10 +147,11 @@ int main()
 
 
     //Ask for bets if we have a better
+    int bet = 0;
     if(option == 'y'){
 
       cout << "How much do you want to bet?" << endl;
-      int bet = 0;
+      
 
       string line;
       int temp = 0;
@@ -159,18 +176,25 @@ int main()
         else if(nextC  == '\n' || nextC  == EOF){
           bet = temp;
         }
+
         
 
         //Flush input then deal our cards out
         cin.clear();
         //Ignore all the characters until an EOF
         cin.ignore(INT_MAX);
+        
+
+        //Check make bet was allowed
+        if(bet > player.better->getMoney()){
+          bet = 0;
+        }
 
       } while (bet != 0);
 
       
-
-      bool cont = player.better->makeBet(bet);
+      cout << "You bet "<< bet << endl;
+      player.better->makeBet(bet);
       //Deal our cards to player then dealer
       Sleep(1000);
       
@@ -184,12 +208,34 @@ int main()
     dealer->hitCard(shoe->dealCard());
     Sleep(3000);
 
+    //Check for the redraw card
+    if(shoe->getReshuffle()){
+      foundReshuffle();
+    }
+
     //Print out what they have
     printHand(&player);
     Sleep(2000);
     //Print out the dealer's hole card card 2
     cout << "The dealer has a " << *(dealer->getHandCopy()[1]) << endl;
     Sleep(3000);
+
+
+    //If either party has a blackjack goto END label
+    if(player.type == BetterType){
+      if(player.better->getScore() == 21){
+        goto BLACKJACK;
+      }
+    }
+    else{
+      if(player.player->getScore() == 21){
+        goto BLACKJACK;
+      }   
+    }
+    if(dealer->getScore() == 21){
+      goto BLACKJACK;
+    }
+    
     
 
     //Ask the player to hit or stand
@@ -202,6 +248,10 @@ int main()
       if(action == 'h'){
         Card *c = shoe->dealCard();
         hitUser(&player, c);
+        //Check for the redraw card
+        if(shoe->getReshuffle()){
+          foundReshuffle();
+        }
         
         cout << "Dealing card" << endl;
         Sleep(1000);
@@ -245,13 +295,198 @@ int main()
     }while(action != 's');
 
 
+    cout << "Dealer's turn " << endl;
+    //Now the dealer will player their hand
 
-    
+
+    //Draw our cards and then print them out
+    //The user won't know
+    while(dealer->getScore() < 17){
+      dealer->hitCard(shoe->dealCard());
+        //Check for the redraw card
+      if(shoe->getReshuffle()){
+        foundReshuffle();
+      }
+    }
+
+    //Print out our cards
+    int len = dealer->getHandCopy().size();
+    for(int i = 2; i < len; i++){
+      cout << "Dealer drew a " << *(dealer->getHandCopy()[i]) << endl;
+      Sleep(1000);
+    }
+
+    //Flip over the hidden card
+    cout << "Dealer flips hidden card " << endl;
+    Sleep(1000);
+    cout << "It's a " << *(dealer->getHandCopy()[0]);
+
+    //Print out our dealers score
+    cout << "Dealer has a " << dealer->getScore() << endl;
+    if(dealer->getBust()){
+      cout << "Dealer has gone bust"<< endl;
+    }
+
+    //Now compare and make a decision
+    //This goto label is for if a black jack occurs
+    BLACKJACK:
+
+    if(player.type == BetterType){
+      //Path if the player has busted
+      if(player.better->getBust()){
+        //If the dealer has gone bust it's a tie or the dealer wins otherwise and do nothing
+        if(dealer->getBust()){
+          ties++;
+          //Return the bet to the better and increase our ties count
+          cout << "Dealer and you are bust. Returning bet" << endl;
+          player.better->returnWinnings(bet);
+        }
+        else{
+          cout << "Dealer wins" << endl;
+        }
+        
+      }
+
+      //Dealer has gone bust
       
-    
+      else if(dealer->getBust())
+      {
+        //If you have reached here you have won
+        wins++;
+        cout << "Dealer went bust. You win with a " << player.better->getScore() << endl;
+        player.better->returnWinnings(bet * 2);
+      }
+
+      //Neither is bust so just compare scores
+      //If you have a blackjack payout by 2.5
+      else{
+        //Tie
+        if(player.better->getScore() == dealer->getScore()){
+          ties++;
+          cout << "Dealer and you both have a. Returning bet "<< dealer->getScore() << endl;
+          player.better->returnWinnings(bet);
+        }
+        //Loss
+        else if(player.better->getScore() < dealer->getScore()){
+          cout << "Dealer has a "<< dealer->getScore() << ". You have a " << player.better->getScore() << endl;
+          cout << "You lose." << endl;
+
+        }
+        //Win
+        else{
+          wins++;
+          cout << "Dealer has a "<< dealer->getScore() << ". You have a " << player.better->getScore() << endl;
+          cout << "You win." << endl;
+          
+          //Check for a black jack
+          //2 cards, 21 score, and one is ace 
+          if(player.better->getScore() == 21 && player.better->getHandCopy().size() == 2){
+            cout << "Blackjack you win 2.5 times your bet" << endl;
+            player.better->returnWinnings(bet * 2.5 + 1);
+          }
+          else{
+            player.better->returnWinnings(bet * 2);
+          }
+        }
+      }
+
+
+      //Return cards to the shoe
+      int len = player.better->getHandCopy().size();
+      for(int i = 0; i < len; i++){
+        shoe->returnCard(player.better->getHandCopy()[i], player.better->getHandCopy()[i]->getOrigin());
+      }
+      player.better->returnHand();
+
+    }
+    else{
+      //Path if the player has busted
+      if(player.player->getBust()){
+        //If the dealer has gone bust it's a tie or the dealer wins otherwise and do nothing
+        if(dealer->getBust()){
+          ties++;
+          //Return the bet to the better and increase our ties count
+          cout << "Dealer and you are bust. Returning bet" << endl;
+        }
+        else{
+          cout << "Dealer wins" << endl;
+        }
+        
+      }
+
+      //Dealer has gone bust
+      
+      else if(dealer->getBust())
+      {
+        //If you have reached here you have won
+        wins++;
+        cout << "Dealer went bust. You win with a " << player.player->getScore() << endl;
+        
+      }
+
+      //Neither is bust so just compare scores
+      //If you have a blackjack payout by 2.5
+      else{
+        //Tie
+        if(player.player->getScore() == dealer->getScore()){
+          ties++;
+          cout << "Dealer and you both have a. Returning bet "<< dealer->getScore() << endl;
+          
+        }
+        //Loss
+        else if(player.player->getScore() < dealer->getScore()){
+          cout << "Dealer has a "<< dealer->getScore() << ". You have a " << player.player->getScore() << endl;
+          cout << "You lose." << endl;
+
+        }
+        //Win
+        else{
+          wins++;
+          cout << "Dealer has a "<< dealer->getScore() << ". You have a " << player.player->getScore() << endl;
+          cout << "You win." << endl;
+          
+          //Check for a black jack
+          //2 cards, 21 score, and one is ace 
+          if(player.better->getScore() == 21 && player.better->getHandCopy().size() == 2)
+            cout << "Blackjack" << endl;
+          
+        }
+      }
+      int len = player.player->getHandCopy().size();
+      for(int i = 0; i < len; i++){
+        shoe->returnCard(player.player->getHandCopy()[i], player.player->getHandCopy()[i]->getOrigin());
+      }
+      player.player->returnHand();
+    }
+
+
+    //Empty out our dealer's hands
+    int len = dealer->getHandCopy().size();
+    for(int i = 0; i < len; i++){
+      shoe->returnCard(dealer->getHandCopy()[i], dealer->getHandCopy()[i]->getOrigin());
+    }
+    dealer->returnHand();
+
+
+    played++;
+
+    Sleep(5000);
+
+    //Print out the money our better has left
+    if(player.type == BetterType){
+      cout << "You have " << player.better->getMoney() << endl;
+      
+      //If they are bankrupt the game is over
+      if(player.better->checkBankruptcy()){
+        cout << "You have gone bankrupt and you are thrown out of this casino" << endl;
+        contFlag = 0;
+      }
+    }
 
     
+    Sleep(5000);
     
+
   }
   
  
@@ -275,6 +510,7 @@ int main()
   }
   delete dealer;
 
+  return 0;
 
 
 }

@@ -38,3 +38,6 @@ void hitUser(User *user, Card *c);
 
 //Print out what our user has
 void printHand(User *user);
+
+//Prints out that we found the reshuffle card if we need to
+void foundReshuffle();
