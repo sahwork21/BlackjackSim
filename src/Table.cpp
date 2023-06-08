@@ -119,8 +119,10 @@ int main()
   //Shuffle our shoe and place the reshuffle card
   shoe->washDecks();
   shoe->setReshuffle();
-
-  Sleep(3000);
+  //Flush input then deal our cards out
+  cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  cin.clear();
+  Sleep(1000);
   //Keep playing until the flag is turned off
   while(contFlag){
 
@@ -130,18 +132,16 @@ int main()
       cout << "Shuffling the Shoe" << endl;
       shoe->washDecks();
       shoe->setReshuffleCard();
+      Sleep(5000);
     }
-    Sleep(5000);
+    
 
     cout << "Remember to do ctrl^C to end the game" << endl;
     Sleep(3000);
 
 
 
-    //Flush input then deal our cards out
-    cin.clear();
-    //Ignore all the characters until an EOF
-    cin.ignore(INT_MAX);
+  
 
 
 
@@ -180,10 +180,8 @@ int main()
         
 
         //Flush input then deal our cards out
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cin.clear();
-        //Ignore all the characters until an EOF
-        cin.ignore(INT_MAX);
-        
 
         //Check make bet was allowed
         if(bet > player.better->getMoney()){
@@ -297,8 +295,8 @@ int main()
       else if(action != 's' && action != 'h'){
         cout << "Make sure to enter a valid character" << endl;
       }
+      cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       cin.clear();
-      cin.ignore(INT_MAX);
       Sleep(500);
 
     }while(action != 's');
@@ -328,7 +326,7 @@ int main()
     //Flip over the hidden card
     cout << "Dealer flips hidden card " << endl;
     Sleep(1000);
-    cout << "It's a " << *(dealer->getHandCopy()[0]);
+    cout << "It's a " << *(dealer->getHandCopy()[0]) << endl;
 
     //Print out our dealers score
     cout << "Dealer has a " << dealer->getScore() << endl;

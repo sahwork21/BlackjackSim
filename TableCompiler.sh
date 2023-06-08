@@ -2,6 +2,11 @@
 rm Table.exe
 rm *.o
 
+#######################################
+# MAKE SURE YOU COMPILE WITH THE RIGHT FLAGS
+# WINDOWS for windows
+# LINUX for linux
+#######################################
 # Compile the objects and then throw them all together
 #Make sure we are checking for successful compilation. It is 0
 g++ -Wall -std=c++17 -g -c src/Card.cpp -o Card.o

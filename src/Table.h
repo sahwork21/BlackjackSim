@@ -7,7 +7,7 @@
 #include "Dealer.h"
 #include "Better.h"
 #include "Player.h"
-#include <iostream>
+
 //Windows compilation
 #ifdef WINDOWS
 #include <Windows.h>
@@ -17,8 +17,13 @@
 #ifdef LINUX
 #include <unistd.h>
 #endif
+//For signalling the program is over
 #include <csignal>
-#include <limits.h>
+//Getting inputs
+#include <iostream>
+
+#include <ios>
+#include <limits>
 
 //Methods needed for verifying input
 using std::getline;
