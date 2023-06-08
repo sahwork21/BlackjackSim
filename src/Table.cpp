@@ -66,21 +66,24 @@ void signalHandle(int signum)
 int main()
 {
 
+  //Set up our signal handler for SIGINT
+  signal(SIGINT, signalHandle);
+
   //Keep our wins and hands played
   int played = 0;
   int wins = 0;
   int ties = 0;
 
-
+  /**This section is skipped as most casinos use 6 decks*/
   //Ask how many decks we should have in our shoe
-  cout << "How many decks should we have in the shoe? Between 1 and 8" << endl;
+  // cout << "How many decks should we have in the shoe? Between 1 and 8" << endl;
 
-  int decks = 0;
+  // int decks = 0;
   
-  //If someone put an ineligible amount of decks it will just throw an exception
-  cin >> decks;
+  // //If someone put an ineligible amount of decks it will just throw an exception
+  // cin >> decks;
 
-  Shoe *shoe = new Shoe(decks);
+  Shoe *shoe = new Shoe(6);
 
 
   //Wait 2 seconds before proceeding
@@ -137,10 +140,29 @@ int main()
     
 
     cout << "Remember to do ctrl^C to end the game" << endl;
-    Sleep(3000);
+    //Should give enough time for someone to react and quit if they want to
+    Sleep(5000);
 
 
+    if(!contFlag){
+      //Print out our winnings
+      cout << "You won " << wins << " games of " << played << endl;
+      if(player.type == BetterType){
+        cout << "You made " << player.better->getMoney() - 500 << " net money" << endl;
+      }
+      //Delete all our new objects
+      delete shoe;  
 
+      if(player.type == BetterType){
+        delete player.better;
+      }
+      else{
+        delete player.player;
+      }
+      delete dealer;
+
+      return 0;
+    }
   
 
 
