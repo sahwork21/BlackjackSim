@@ -47,6 +47,10 @@ Shoe::~Shoe()
 void Shoe::setDecks()
 {
   for(int i = 0; i < deckCount; i++){
+    //We need to add some sort of waiting so randomnes is maintained
+    srand(time(0));
+    //Sleep from 1 to 5 seconds
+    Sleep(1000 + (rand() % 5000));
     decks[i] = new Deck(i);
   }
 }

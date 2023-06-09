@@ -2,7 +2,7 @@
 rm ShoeTest.exe
 
 #Compile the tester with TEST flag set
-g++ -Wall -std=c++17 -g ShoeTest.cpp ../src/Shoe.cpp ../src/Card.cpp ../src/Deck.cpp -o ShoeTest -DTEST
+g++ -Wall -std=c++17 -g ShoeTest.cpp ../src/Shoe.cpp ../src/Card.cpp ../src/Deck.cpp -o ShoeTest -DWINDOWS
 
 #Use -v and -ftime-report to see what the compiler is up to
 

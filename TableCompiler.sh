@@ -23,7 +23,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #Compile the shoe object
-g++ -Wall -std=c++17 -g -c src/Shoe.cpp -o Shoe.o
+g++ -Wall -std=c++17 -g -c src/Shoe.cpp -o Shoe.o -DWINDOWS
 if [ $? -ne 0 ]; then
     echo "Failed to make Shoe object"
     exit 1

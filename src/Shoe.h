@@ -11,7 +11,15 @@
 #include "Deck.h"
 #include <vector>
 #include <exception>
+//Windows compilation
+#ifdef WINDOWS
+#include <Windows.h>
+#endif
 
+//If You use linux use this and not windows or sleep may not work
+#ifdef LINUX
+#include <unistd.h>
+#endif
 using std::vector;
 
 class Shoe
