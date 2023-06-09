@@ -10,6 +10,7 @@
 
 #include "Deck.h"
 #include <vector>
+#include <exception>
 
 using std::vector;
 
@@ -24,7 +25,7 @@ class Shoe
     bool reshuffle;
 
     //We have a vector of decks that we will shuffle and then wash together into a queue
-    vector<Deck*> decks;
+    Deck *decks[8];
 
     //A wash is really just some values from 1 to 6 or 8.
     //This number indicates which deck we will draw from
@@ -34,7 +35,23 @@ class Shoe
     //Place around a quarter into the whole wash
     int reshuffleCard;
 
+    //Construct the deck with the an origin
+    void setDecks();
     
+
+    //Set up our wash of ints
+    void setWash();
+
+
+    //We need to be able to deal cards and give them back to us
+    //Just draw from the front and send to back
+    //Enevtually we will find the reshuffle card
+    int dealFromWash();
+
+
+    //Deal from the right deck based on origin
+    //What is really happening when dealing from our wash of ints
+    Card* dealFromDecks(int origin);
 
 
   public:
@@ -49,12 +66,10 @@ class Shoe
     void setReshuffle();
     int getDeckCount() const;
     bool getReshuffle() const;
-    //Construct the deck with the an origin
-    void setDecks();
+    
 
-
-    //Set up our wash of ints
-    void setWash();
+    
+    
 
     //Method to place the card in the deck randomly
     //Needs to be done after shuffling decks and washing the cards together
@@ -66,13 +81,10 @@ class Shoe
     void washDecks();
 
 
-    //We need to be able to deal cards and give them back to us
-    //Just draw from the front and send to back
-    //Enevtually we will find the reshuffle card
-    int dealFromWash();
-
-    //Deal from the right deck based on origin
-    Card* dealFromDecks(int origin);
+    
+    //The black box switch that just deals a card. Flips the reshuffle flag itelf
+    Card *dealCard();
+    
 
     //Return a card with the correct origin
     void returnCard(Card *card, int origin);
