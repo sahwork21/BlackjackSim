@@ -18,7 +18,7 @@ Shoe::Shoe()
 
 Shoe::Shoe(int decks)
 {
-  if(decks > 8 || decks < 1){
+  if(decks > 8 || decks < 2){
     throw std::invalid_argument("Deck count cannot exceed 8");
   }
   setReshuffle();
@@ -108,25 +108,21 @@ void Shoe::washDecks()
   //This should somewhat simulate shuffling around decks then merging together
   std::mt19937 rng;   
   rng.seed(time(0));
-  std::uniform_int_distribution<int32_t> dist(2000, 3000); //For shuffling the deck
+  //std::uniform_int_distribution<int32_t> dist(2000, 3000); //For shuffling the deck
 
 
-  int rounds = dist(rng);
-  Card *temp = wash[0];
+  //int rounds = dist(rng);
+  //Card *temp = wash[0];
   //Swap two randomly selected ints 2000 to 3000 times using the temp pointer
-	for(int i = 0; i < rounds; i++){
-		int a = i % DECK_SIZE;
-		int b = dist(rng) % (DECK_SIZE * deckCount);
-		
-    //Swapping of cards now we just exchange pointers
-		temp = wash[a];
-	
-    wash[a] = wash[b];
-		
-    wash[b] = temp;
-		
+  //For this shuffling method will shuffle around 2/deckCount of the shoe. Merging around 2 decks basically
+  
+  for(int i = 0; i < deckCount - 1; i++){
+    shuffle(wash.begin() + (i * DECK_SIZE), wash.begin() + (i + 2 * DECK_SIZE), rng);
+  }
 
-	}
+  //Now just poker shuffle everything in a big pile
+  shuffle(wash.begin(), wash.end(), rng);
+	
 
   //We have shuffle up our deck so set the reshuffle flag to false
   reshuffle = false;
@@ -201,6 +197,9 @@ Card* Shoe::dealCard()
   //If so reshuffle will have to become true and we need another card
   if(c->getScore() == -1){
     reshuffle = true;
+    //Delete this card since it's no longer of use
+    delete c;
+
     c = wash.front();
     wash.erase(wash.begin());
   }

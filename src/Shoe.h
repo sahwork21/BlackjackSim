@@ -11,6 +11,7 @@
 #include "Deck.h"
 #include <vector>
 #include <exception>
+#include <algorithm>
 //Windows compilation
 #ifdef WINDOWS
 #include <Windows.h>
@@ -21,6 +22,7 @@
 #include <unistd.h>
 #endif
 using std::vector;
+using std::shuffle;
 
 class Shoe
 {
