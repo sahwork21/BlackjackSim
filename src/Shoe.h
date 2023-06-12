@@ -32,19 +32,11 @@ class Shoe
     //Start as false until -1 is pulled from the wash
     bool reshuffle;
 
-    //We have a vector of decks that we will shuffle and then wash together into a queue
-    Deck *decks[8];
-
-    //A wash is really just some values from 1 to 6 or 8.
-    //This number indicates which deck we will draw from
-    vector<int> wash;
-
-    //Index of a card indicating the final hand and a reshuffle is coming
-    //Place around a quarter into the whole wash
-    int reshuffleCard;
+    //This is our vector of a bunch of cards
+    vector<Card*> wash;
 
     //Construct the deck with the an origin
-    void setDecks();
+    //void setDecks();
     
 
     //Set up our wash of ints
@@ -95,7 +87,7 @@ class Shoe
     
 
     //Return a card with the correct origin
-    void returnCard(Card *card, int origin);
+    void returnCard(Card *card);
 
 
 

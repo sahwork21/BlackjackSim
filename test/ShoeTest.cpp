@@ -74,13 +74,13 @@ int main()
 
 
   //Return those cards then reshuffle and insert the -1 reshuffle card
-  s->returnCard(c, c->getOrigin());
-  s2->returnCard(c2, c2->getOrigin());
+  s->returnCard(c);
+  s2->returnCard(c2);
 
   
   //Lets work with s2 since it will take less time to get to the place holder
   s2->setReshuffleCard();
-
+  int diamondC = 0;
   total++;
   //If we get to that origin 0 ace of diamonds we didn't make it
   while(!s2->getReshuffle()){
@@ -89,13 +89,17 @@ int main()
 
 
     //Ace of diamonds check
-    if(c->getName().compare("Ace") == 0 && c->getOrigin() == 0 && c->getSuit().compare("Diamonds") == 0){
-      cerr << "We drew the whole deck without getting the reshuffle card" << endl;
+    //If we find it twice test failed
+    if(c->getName().compare("Ace") == 0 && c->getOrigin() == 0 && c->getSuit().compare("Diamonds") == 0 && diamondC == 1){
+      cerr << "We drew the whole shoe without getting the reshuffle card" << endl;
       delete s;
       delete s2;
       report(passing, total);
     }
-    s2->returnCard(c, c->getOrigin());
+    else if(c->getName().compare("Ace") == 0 && c->getOrigin() == 0 && c->getSuit().compare("Diamonds") == 0){
+      diamondC++;
+    }
+    s2->returnCard(c);
   }
   passing++;
   
