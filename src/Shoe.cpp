@@ -117,7 +117,7 @@ void Shoe::washDecks()
   //For this shuffling method will shuffle around 2/deckCount of the shoe. Merging around 2 decks basically
   
   for(int i = 0; i < deckCount - 1; i++){
-    shuffle(wash.begin() + (i * DECK_SIZE), wash.begin() + (i + 2 * DECK_SIZE), rng);
+    shuffle(wash.begin() + (i * DECK_SIZE), wash.begin() + ((i + 2) * DECK_SIZE), rng);
   }
 
   //Now just poker shuffle everything in a big pile
@@ -173,9 +173,10 @@ int Shoe::getDeckCount() const
 }
 
 //Set and get our reshuffle flag
+//We need to always upon creation
 void Shoe::setReshuffle()
 {
-  reshuffle = false;
+  reshuffle = true;
 }
 
 bool Shoe::getReshuffle() const

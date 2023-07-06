@@ -7,8 +7,7 @@
  */
 
 
-#include "Card.h"
-#include "Deck.h"
+#include "Shoe.h"
 #include <stdio.h>
 #include <ctime>
 #include <iostream>
@@ -112,13 +111,15 @@ int main(int argc, char *argv[])
   //Seed our random values
   rng.seed(time(0));
 
-  Deck* deck = new Deck();
-	readDeck(deck);
+  //Now we are using a shoe
+  Shoe *shoe = new Shoe(6);
+	
 
   //Count up our occurences and print them out
   int occurences[18] = {0};
 
   int rounds = 0;
+  int reshuffles = 0;
   int match = sscanf(argv[1], "%d", &rounds);
 
 
@@ -141,34 +142,48 @@ int main(int argc, char *argv[])
   Card *a;
   Card *b;
   for(int i = 0; i < rounds; i++){
-    deck->shuffleDeck();
+    
+    //Only reshuffle if the flag is true
+    if(shoe->getReshuffle()){
+      reshuffles++;
+      shoe->washDecks();
+      shoe->setReshuffleCard();
+    }
+
+
     //Need top 2 cards
-    a = deck->dealCard();
-    b = deck->dealCard();
+    a = shoe->dealCard();
+    b = shoe->dealCard();
     int score = a->getScore() + b->getScore();
     
     //If we got a 22 just change score to a 12 as one ace become a 1s
+    //No reducing needed from Cards
     if(score == 22 && (a->getName().compare("Ace") ==0 || b->getName().compare("Ace")) ==0){
       score = 12;
     }
 
-    cout << score << endl;
+    //cout << score << endl;
     //Increase the value of our occurences
     occurences[score - 4] += 1;
 
-    deck->returnCard(a);
-    deck->returnCard(b);
+    shoe->returnCard(a);
+    shoe->returnCard(b);
 
   }
-
+  
   //Print out our sim results
   cout << endl << endl;
   for(int i = 0; i < 18; i++){
     
     cout << "There are " << (occurences[i]) << " " << i + 4 << "'s" << endl;
   }
+  cout << "Shoe was shuffled " << reshuffles << " times. (This includes the initial shuffling)" << endl;
+
+
+  //We should be hovering around 18 to 20 as our most common cards since there are a lot more 10 values than others
+  //However as we know a quarter of the cards are never used. About one and a half decks worth of cards
 
   
-  delete deck;
+  delete shoe;
   return 0;
 }

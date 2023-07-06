@@ -18,14 +18,21 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+g++ -Wall -std=c++17 -g -c src/Shoe.cpp -o Shoe.o
+if [ $? -ne 0 ]; then
+    echo "Failed to make Shoe object"
+    exit 1
+fi
+
 g++ -Wall -std=c++17 -g -c src/GameSim.cpp -o GameSim.o
 if [ $? -ne 0 ]; then
     echo "Failed to make GameSim object"
     exit 1
 fi
 
+
 #Finally compile our executable
-g++ -Wall -std=c++17 -g GameSim.o Card.o Deck.o -o GameSim
+g++ -Wall -std=c++17 -g GameSim.o Card.o Deck.o Shoe.o -o GameSim
 
 
 #Check that what we compiled is there or not
