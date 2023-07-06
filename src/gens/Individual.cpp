@@ -59,8 +59,10 @@ Individual::Individual(int hard[17][10], int soft[8][10], int pair[10][10]) : fi
 
 }
 
+void Individual::playHand(vector<Card*>& hand, Shoe& shoe, bool splittable);
+
 //Just statically allocate a six deck shoe of cards like GameSim does and play against a dealer
-void playRounds(int rounds)
+void Individual::playRounds(int rounds)
 {
   //Seed our random values
   rng.seed(time(0));
@@ -90,6 +92,12 @@ void playRounds(int rounds)
 
     //Now we check for pairs then check if we have an ace then we will play the game
     //Keep playing until we get a 1 to stand
+    //This should be played like a thread
+
+    //We will wait and continue to wait until this is done before dealing cards to our dealer
+    //Just use a counting semaphore and a mutex lock 
+
+    playHand(&hand, &shoe, true);
 
   }
 }

@@ -15,6 +15,9 @@
  */
 #include "../Shoe.h"
 #include <vector>
+#include <thread>
+#include <semaphore>
+
 
 
 //Class containing a collection of grids and what to do
@@ -35,6 +38,10 @@ class Individual
     int fitness;
 
     //Underlying method that will play an individual hand if we split
+    //Only splittable twice so if this method recursively calls itself set splittable to false
+    //Just modify it and we will check on it later in playRounds
+    void playHand(vector<Card*>& hand, Shoe& shoe, bool splittable);
+
 
   public:
     //The fields for our individual on this constructor are just random stuff for moves
