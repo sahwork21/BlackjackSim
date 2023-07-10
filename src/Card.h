@@ -36,7 +36,7 @@ class Card
     void setScore(int score);
     void setSuit(string suit);
     void setName(string name);
-    void setReducable();
+    
     void setOrigin(int origin);
 
   public:
@@ -51,6 +51,9 @@ class Card
 
     //Destructor
     ~Card();
+
+    //Sets the reducable
+    void setReducable();
 
     //Getters for the Card
     int getScore() const;

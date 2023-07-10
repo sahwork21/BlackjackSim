@@ -154,6 +154,7 @@ void Shoe::returnCard(Card *card)
 {
   //We need to just put the card at the back of the deck
   //We hope it was created using the new keyword
+  card->setReducable();
   wash.push_back(card);
 }
 

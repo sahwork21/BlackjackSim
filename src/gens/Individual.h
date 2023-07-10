@@ -36,11 +36,13 @@ class Individual
   private:
     //Our mutex lock for playing hands
     mutex lock;
-
-    //Conditional variable to check if the shoe is currently in use
     
 
-    //Moves are 0 hit, 1 stand, 2 split, 3 double down
+    //Conditional variable to check if the shoe is currently in use
+    condition_variable cv;
+
+    //***************TODO make split work with some synchronization
+    //Moves are 0 hit, 1 stand, 2 double down, 3 is split for future
 
     //Rows are your score columns is the dealer card
     int hardHands[17][10];
@@ -55,7 +57,7 @@ class Individual
     //Underlying method that will play an individual hand if we split
     //Only splittable twice so if this method recursively calls itself set splittable to false
     //Just modify it and we will check on it later in playRounds
-    void playHand(vector<Card*>& hand, Shoe& shoe, bool splittable);
+    void playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, bool splittable);
 
 
   public:

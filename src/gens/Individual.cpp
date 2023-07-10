@@ -62,13 +62,37 @@ Individual::Individual(int hard[17][10], int soft[8][10], int pair[10][10]) : fi
 
 }
 
-void Individual::playHand(vector<Card*>& hand, Shoe& shoe, bool splittable)
+void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, bool splittable)
 {
+  
+  
   //Lock out the other threads before doing stuff
   //Check a conditional variable if the shoe is not currently being used
-  while(){
+  lock.lock();
+
+  //You can enter the critical section when the shoe is not in use
+  //When this flag is false you may pass
+  while(shoe.getUsing()){
+    cv.wait(lock);
+  }
+
+  //set the flag to true and lock out all the other threads
+  shoe.inUsing();
+
+  
+  //Now we need to check our table out for what to do
+
+  //Check pairs then if we have an ace for a softhand
+  if(hand[0]->getName().compare(hand[1]->getScore())){
 
   }
+
+
+
+  //Unlock the critical section and let some other thread in
+  shoe.notUsing();
+  lock.unlock();
+  cv.notify_one();
 
 }
 
@@ -82,6 +106,8 @@ void Individual::playRounds(int rounds)
   Shoe *shoe = new Shoe(6);
 
   //Now play our game
+  //
+  vector<int> scores;
   vector<Card*> hand;
   vector<Card*> dealer;
   for(int i = 0; i < rounds; i++){
@@ -100,6 +126,22 @@ void Individual::playRounds(int rounds)
     hand.push_back(shoe->dealCard());
     dealer.push_back(shoe->dealCard());
 
+    int dealerScore = dealer[0]->getScore() + dealer[1]->getScore();
+
+    //Reduce an ace if needed
+    if(hand[0]->getScore() + hand[1]->getScore() == 22){
+     
+      hand[0]->reduce();
+      
+    }
+
+    if(dealerScore == 22){
+     
+      dealer[0]->reduce();
+      dealerScore = 12;
+    }
+
+
 
     //Now we check for pairs then check if we have an ace then we will play the game
     //Keep playing until we get a 1 to stand
@@ -108,12 +150,59 @@ void Individual::playRounds(int rounds)
     //We will wait and continue to wait until this is done before dealing cards to our dealer
     //We need to wait on this hand thread to end and we rejoin with it
     //We will have to use a mutex lock to make sure that only one hand is getting cards at a time
+    //If we have 21 just skip to the comparing part
 
-    thread hand(playHand, &hand, &shoe, true);
+    if(hand[0]->getScore() + hand[1]->getScore() != 21){
+      thread hand(playHand, &hand, &shoe, &scores true);
 
-    //Wait for hand thread to finish up
-    hand.join();
+      //Wait for hand thread to finish up
+      hand.join();
+    }
+    else{
+      scores.push_back(21);
+    }
 
+
+    //Play the dealer's hand out
+    while(dealerScore < 17){
+      dealer.push_back(shoe->dealCard());
+
+      //If we went bust we need to check for anything to reduce
+      if(dealerScore > 21){
+        int len = dealer.size();
+        int i = 0;
+        while(i < len && dealerScore > 21){
+
+          //We can reduce something
+          if(dealer[i]->getReducable()){
+            dealer[i]->reduce();
+            score -= 10;
+          }
+        }
+      }
+
+      
+    }
+
+    //Now compare scores and add to fitness
+    int len = scores.size();
+    for(int i = 0; i < len; i++){
+      if(scores[i] > dealerScore){
+        fitness++;
+      }
+      else if(scores[i] < dealerScore){
+        fitness--;
+      }
+    }
+
+    //Now return the dealer's cards
+    //The player's cards should return themsevles when being counted up
+
+    while(dealer.size() > 0){
+      shoe->returnCard(dealer[0]);
+    }
+
+    scores.clear();
 
 
   }
