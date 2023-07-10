@@ -28,6 +28,28 @@ int main()
   //Make sure the default construction works
   Shoe *s = new Shoe();
   Shoe *s2 = new Shoe(2);
+  
+  //Make sure that the flags is false for inUse
+  total++;
+  if(s->getUsing() != false || s2->getUsing() != false){
+    delete s;
+    delete s2;
+    cerr << "In use flag not false" << endl;
+    report(passing, total);
+  }
+  passing++;
+
+  //Change it up
+  total++;
+  s->inUsing();
+  s2->inUsing();
+  if(s->getUsing() != true || s2->getUsing() != true){
+    delete s;
+    delete s2;
+    cerr << "In use flag not true" << endl;
+    report(passing, total);
+  }
+  passing++;
 
   total++;
   if(s->getDeckCount() != 6){
@@ -46,10 +68,10 @@ int main()
 
 
   
-  if(s->getReshuffle() != false || s->getReshuffle() != false){
+  if(s->getReshuffle() != true || s->getReshuffle() != true){
     delete s;
     delete s2;
-    cerr << "Always start with false for a shoe" << endl;
+    cerr << "Always start with true for a shoe" << endl;
     report(passing, total);
   }
 

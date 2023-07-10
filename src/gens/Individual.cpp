@@ -14,6 +14,9 @@
  */
 #include "Individual.h"
 
+
+
+
 //Simple destructor
 Individual::~Individual()
 {
@@ -59,7 +62,15 @@ Individual::Individual(int hard[17][10], int soft[8][10], int pair[10][10]) : fi
 
 }
 
-void Individual::playHand(vector<Card*>& hand, Shoe& shoe, bool splittable);
+void Individual::playHand(vector<Card*>& hand, Shoe& shoe, bool splittable)
+{
+  //Lock out the other threads before doing stuff
+  //Check a conditional variable if the shoe is not currently being used
+  while(){
+
+  }
+
+}
 
 //Just statically allocate a six deck shoe of cards like GameSim does and play against a dealer
 void Individual::playRounds(int rounds)
@@ -95,9 +106,15 @@ void Individual::playRounds(int rounds)
     //This should be played like a thread
 
     //We will wait and continue to wait until this is done before dealing cards to our dealer
-    //Just use a counting semaphore and a mutex lock 
+    //We need to wait on this hand thread to end and we rejoin with it
+    //We will have to use a mutex lock to make sure that only one hand is getting cards at a time
 
-    playHand(&hand, &shoe, true);
+    thread hand(playHand, &hand, &shoe, true);
+
+    //Wait for hand thread to finish up
+    hand.join();
+
+
 
   }
 }

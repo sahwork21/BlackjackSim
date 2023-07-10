@@ -9,6 +9,7 @@
 //Default constructor setting our deck up to have six decks
 Shoe::Shoe()
 {
+  notUsing();
   setReshuffle();
   setDeckCount(6);
   //Generate the decks and a wash
@@ -21,6 +22,7 @@ Shoe::Shoe(int decks)
   if(decks > 8 || decks < 2){
     throw std::invalid_argument("Deck count cannot exceed 8");
   }
+  notUsing();
   setReshuffle();
   setDeckCount(decks);
 
@@ -209,4 +211,18 @@ Card* Shoe::dealCard()
   return c;
 
 }
+
+void Shoe::notUsing()
+{
+  inUse = false;
+}
+void Shoe::inUsing()
+{
+  inUse = true;
+}
+bool Shoe::getUsing() const
+{
+  return inUse;
+}
+
 

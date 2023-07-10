@@ -39,6 +39,11 @@ class Shoe
 
     //Construct the deck with the an origin
     //void setDecks();
+
+    //is this deck currently in use
+    //Useful for synchronization
+    bool inUse;
+    
     
 
     //Set up our wash of ints
@@ -91,8 +96,13 @@ class Shoe
     //Return a card with the correct origin
     void returnCard(Card *card);
 
+    //Flip the flag for inUse
+    void inUsing();
+    void notUsing();    
+    bool getUsing() const;
 
 
+    
     
 
 

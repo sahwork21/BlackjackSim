@@ -13,10 +13,19 @@
  * 
  * 
  */
+#ifndef INDIVIDUAL_H
+#define INDIVIDUAL_H
+
 #include "../Shoe.h"
 #include <vector>
 #include <thread>
 #include <semaphore>
+#include <mutex>  
+#include <condition_variable>  
+
+using std::thread;
+using std::mutex;
+using std::condition_variable;
 
 
 
@@ -25,6 +34,12 @@
 class Individual
 {
   private:
+    //Our mutex lock for playing hands
+    mutex lock;
+
+    //Conditional variable to check if the shoe is currently in use
+    
+
     //Moves are 0 hit, 1 stand, 2 split, 3 double down
 
     //Rows are your score columns is the dealer card
@@ -47,7 +62,7 @@ class Individual
     //The fields for our individual on this constructor are just random stuff for moves
     Individual();
     //Just fill in the arrays from what we have of a parent
-    Individual(int hard[17][10], int soft[8][10], int pair[10][10]);
+    Individual(int hard[16][10], int soft[8][10], int pair[10][10]);
 
     //Destructor that just deletes the pointer
     //Since the fields are static allocated it should be good
@@ -57,9 +72,11 @@ class Individual
     void playRounds(int rounds);
 
     //Compare this individual to another
-    bool operator >(const Individual& rhs) const;
+    bool operator >(const Individual& other) const;
 
     //Get the fitness
     int getFitness() const;
 
 };
+
+#endif
