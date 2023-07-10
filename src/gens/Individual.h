@@ -27,7 +27,8 @@ using std::thread;
 using std::mutex;
 using std::condition_variable;
 
-
+//Enum defining moves for an individual
+typedef enum{Hit, Stand, DoubleDown, Split} Move;
 
 //Class containing a collection of grids and what to do
 //It will also have a hand of cards
@@ -43,13 +44,14 @@ class Individual
 
     //***************TODO make split work with some synchronization
     //Moves are 0 hit, 1 stand, 2 double down, 3 is split for future
+    //0 row is the lowest scores
 
     //Rows are your score columns is the dealer card
-    int hardHands[17][10];
+    Move hardHands[16][10];
     //Rows are ace plus the other 9 card types
-    int softHands[8][10];
+    Move softHands[8][10];
     //Rows are the pair type
-    int pairHands[10][10];
+    Move pairHands[10][10];
     //When playing a sim we check for pairs then softs then hards
 
     int fitness;
@@ -57,14 +59,14 @@ class Individual
     //Underlying method that will play an individual hand if we split
     //Only splittable twice so if this method recursively calls itself set splittable to false
     //Just modify it and we will check on it later in playRounds
-    void playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, bool splittable);
+    void playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable);
 
 
   public:
     //The fields for our individual on this constructor are just random stuff for moves
     Individual();
     //Just fill in the arrays from what we have of a parent
-    Individual(int hard[16][10], int soft[8][10], int pair[10][10]);
+    Individual(Move hard[16][10], Move soft[8][10], Move pair[10][10]);
 
     //Destructor that just deletes the pointer
     //Since the fields are static allocated it should be good
