@@ -34,20 +34,20 @@ Individual::Individual() : fitness(0)
   //Fill hards softs then pairs
   for(int i = 0; i < 16; i++){
     for(int j = 0; j < 10; j++){
-      hardHands[i][j] = rand() % 3;
+      hardHands[i][j] = moveCollection[rand() % 3];
     }
   }
 
   //Fill in softs then hards then pairs
   for(int i = 0; i < 8; i++){
     for(int j = 0; j < 10; j++){
-      softHands[i][j] = rand() % 3;
+      softHands[i][j] = moveCollection[rand() % 3];
     }
   }
   //Fill in softs then hards then pairs
   for(int i = 0; i < 10; i++){
     for(int j = 0; j < 10; j++){
-      pairHands[i][j] = rand() % 4;
+      pairHands[i][j] = moveCollection[rand() % 4];
     }
   }
 }
@@ -63,18 +63,19 @@ Individual::Individual(Move hard[16][10], Move soft[8][10], Move pair[10][10]) :
 
 }
 
-void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable)
+int Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable, int depth)
 {
   
   
   //Lock out the other threads before doing stuff
   //Check a conditional variable if the shoe is not currently being used
-  lock.lock();
+  std::unique_lock<mutex> lk(lock);
+  lk.lock();
 
   //You can enter the critical section when the shoe is not in use
   //When this flag is false you may pass
   while(shoe.getUsing()){
-    cv.wait(lock);
+    cv.wait(lk);
   }
 
   //set the flag to true and lock out all the other threads
@@ -88,7 +89,7 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
   //Keep going until we are told to stand, split, or 21 is reached
   while(score < 21 && instruction == Hit){
     //Check pairs then if we have an ace for a softhand
-    if(hand.size == 2 && (hand[0]->getName().compare(hand[1]->getName()) || hand[0]->getScore() == hand[1]->getScore())){
+    if(hand.size() == 2 && (hand[0]->getName().compare(hand[1]->getName()) || hand[0]->getScore() == hand[1]->getScore())){
       
       instruction = pairHands[hand[1]->getScore() - 2][dealerCard - 2];
       
@@ -102,22 +103,76 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
       instruction = softHands[hand[0]->getScore() - 2][dealerCard - 2];
     }
 
-    //Check hard hands next if we have no move or we will split and its unsplittable
-    if(instruction == -1 || (instruction == Split && !splittable)){
+    //Check hard hands next if we found no move in any of the tables
+    else{
       instruction = hardHands[score - 5][dealerCard - 2];
     }
+
+    //If we are in a split in a non splittable hand just pick from the hards
+
+    //Hit or double down if told to do so
+    if(instruction == Hit || instruction == DoubleDown){
+      hand.push_back(shoe.dealCard());
+      score += hand.back()->getScore();
+      //Check if we have exceeded 21 before reentering the loop
+      bool reduce = false;
+      int len = hand.size();
+      if(score > 21){
+        for(int i = 0; i < len; i++){
+          //If our card is reducable and reduce is false reduce the ace and decrease the score
+          if(hand[i]->getReducable() && !reduce){
+            hand[i]->reduce();
+            reduce = true;
+            score -= 10;
+          }
+        }
+      }
+    }
+
+    
     
   }
 
+  if(instruction == Split){
+    //Create two vectors and make two more threads
+    vector<Card*> one;
+    one.push_back(hand.front());
+    one.push_back(shoe.dealCard());
+    vector<Card*> two;
+    two.push_back(hand.back());
+    two.push_back(shoe.dealCard());
+    //We should probably wait on threads to finish so their resources don't disappear, but I don't know if they do
+    //Maybe it's like Java or not
+    
+    
+    if(depth <= 1){
+      thread first(playHand, &one, shoe, scores, dealerCard, true, depth + 1);
+      thread second(playHand, &two, shoe, scores, dealerCard, true, depth + 1);
 
+      first.join();
+      second.join();
+    }
+    else{
+      thread first(playHand, &one, shoe, scores, dealerCard, false, depth + 1);
+      thread second(playHand, &two, shoe, scores, dealerCard, false, depth + 1);
+      first.join();
+      second.join();
+    }
+
+  }
   //Unlock the critical section and let some other thread in
-  shoe.notUsing();
-
-  //Add scores to back
-  int scores
-  scores.push_back();
-  lock.unlock();
+  shoe.notUsing();  
+  lk.unlock();
   cv.notify_one();
+  //End of critical section
+
+  //Either we have to split the hand or just tally up the score 
+  
+  if(instruction != Split){
+    scores.push_back(score);
+  }
+
+  
 
   
 
@@ -127,7 +182,7 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
 void Individual::playRounds(int rounds)
 {
   //Seed our random values
-  rng.seed(time(0));
+  srand(time(0));
 
   //Now we are using a shoe
   Shoe *shoe = new Shoe(6);
@@ -180,7 +235,8 @@ void Individual::playRounds(int rounds)
     //If we have 21 just skip to the comparing part
 
     if(hand[0]->getScore() + hand[1]->getScore() != 21){
-      thread hand(playHand, &hand, &shoe, &scores, dealer[1]->getScore(), true);
+      //This thread will not return anything it just modifies scores
+      std::thread hand(playHand, &hand, &shoe, &scores, dealer[1]->getScore(), true, 0);
 
       //Wait for hand thread to finish up
       hand.join();
@@ -203,7 +259,7 @@ void Individual::playRounds(int rounds)
           //We can reduce something
           if(dealer[i]->getReducable()){
             dealer[i]->reduce();
-            score -= 10;
+            dealerScore -= 10;
           }
         }
       }

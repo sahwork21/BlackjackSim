@@ -30,6 +30,9 @@ using std::condition_variable;
 //Enum defining moves for an individual
 typedef enum{Hit, Stand, DoubleDown, Split} Move;
 
+//Collection of moves for construction purposes
+Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
+
 //Class containing a collection of grids and what to do
 //It will also have a hand of cards
 class Individual
@@ -59,7 +62,7 @@ class Individual
     //Underlying method that will play an individual hand if we split
     //Only splittable twice so if this method recursively calls itself set splittable to false
     //Just modify it and we will check on it later in playRounds
-    void playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable);
+    int playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable, int depth);
 
 
   public:
