@@ -69,7 +69,7 @@ int Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, i
   
   //Lock out the other threads before doing stuff
   //Check a conditional variable if the shoe is not currently being used
-  std::unique_lock<mutex> lk(lock);
+  std::unique_lock<std::mutex> lk(lock);
   lk.lock();
 
   //You can enter the critical section when the shoe is not in use
@@ -146,15 +146,15 @@ int Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, i
     
     
     if(depth <= 1){
-      thread first(playHand, &one, shoe, scores, dealerCard, true, depth + 1);
-      thread second(playHand, &two, shoe, scores, dealerCard, true, depth + 1);
+      std::thread first(playHand, &one, shoe, scores, dealerCard, true, depth + 1);
+      std::thread second(playHand, &two, shoe, scores, dealerCard, true, depth + 1);
 
       first.join();
       second.join();
     }
     else{
-      thread first(playHand, &one, shoe, scores, dealerCard, false, depth + 1);
-      thread second(playHand, &two, shoe, scores, dealerCard, false, depth + 1);
+      std::thread first(playHand, &one, shoe, scores, dealerCard, false, depth + 1);
+      std::thread second(playHand, &two, shoe, scores, dealerCard, false, depth + 1);
       first.join();
       second.join();
     }
@@ -298,4 +298,18 @@ void Individual::playRounds(int rounds)
   }
 }
 
+
+//Just compare the fitness of two of these objects
+bool Individual::operator>(const Individual & other) const
+{
+  if(this->fitness > other.getFitness()){
+    return true;
+  }
+  return false;
+}
+
+int Individual::getFitness() const
+{
+  return fitness;
+}
 

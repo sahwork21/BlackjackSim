@@ -19,13 +19,10 @@
 #include "../Shoe.h"
 #include <vector>
 #include <thread>
-#include <semaphore>
 #include <mutex>  
 #include <condition_variable>  
 
-using std::thread;
-using std::mutex;
-using std::condition_variable;
+
 
 //Enum defining moves for an individual
 typedef enum{Hit, Stand, DoubleDown, Split} Move;
@@ -39,11 +36,11 @@ class Individual
 {
   private:
     //Our mutex lock for playing hands
-    mutex lock;
+    std::mutex lock;
     
 
     //Conditional variable to check if the shoe is currently in use
-    condition_variable cv;
+    std::condition_variable cv;
 
     //***************TODO make split work with some synchronization
     //Moves are 0 hit, 1 stand, 2 double down, 3 is split for future
@@ -79,7 +76,8 @@ class Individual
     void playRounds(int rounds);
 
     //Compare this individual to another
-    bool operator >(const Individual& other) const;
+    //Return true if we are greater, false otherwise
+    bool operator>(const Individual& other) const;
 
     //Get the fitness
     int getFitness() const;
