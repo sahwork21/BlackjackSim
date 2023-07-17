@@ -50,6 +50,10 @@ Individual::Individual() : fitness(0)
       pairHands[i][j] = moveCollection[rand() % 4];
     }
   }
+
+  //lock = PTHREAD_MUTEX_INITIALIZER;
+  //cv = PTHREAD_COND_INITIALIZER;
+
 }
 
 
@@ -57,26 +61,27 @@ Individual::Individual() : fitness(0)
 Individual::Individual(Move hard[16][10], Move soft[8][10], Move pair[10][10]) : fitness(0)
 {
   //Just use memcpy to copy in the parameters
-  memcpy(&hardHands, &hard, sizeof(hardHands));
-  memcpy(&softHands, &soft, sizeof(softHands));
-  memcpy(&pairHands, &pair, sizeof(pairHands));
+  std::memcpy(hardHands, hard, sizeof(hardHands));
+  std::memcpy(softHands, soft, sizeof(softHands));
+  std::memcpy(pairHands, pair, sizeof(pairHands));
+  //lock = PTHREAD_MUTEX_INITIALIZER;
+  //cv = PTHREAD_COND_INITIALIZER;
 
 }
 
-int Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable, int depth)
+void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable, int depth)
 {
   
   
   //Lock out the other threads before doing stuff
   //Check a conditional variable if the shoe is not currently being used
-  std::unique_lock<std::mutex> lk(lock);
-  lk.lock();
+  //pthread_mutex_lock(&lock);
 
   //You can enter the critical section when the shoe is not in use
   //When this flag is false you may pass
-  while(shoe.getUsing()){
-    cv.wait(lk);
-  }
+  // while(shoe.getUsing()){
+  //   cv.wait(lk);
+  // }
 
   //set the flag to true and lock out all the other threads
   shoe.inUsing();
@@ -143,32 +148,33 @@ int Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, i
     two.push_back(shoe.dealCard());
     //We should probably wait on threads to finish so their resources don't disappear, but I don't know if they do
     //Maybe it's like Java or not
-    
+    hand.pop_back();
+    hand.pop_back();
     
     if(depth <= 1){
-      std::thread first(playHand, &one, shoe, scores, dealerCard, true, depth + 1);
-      std::thread second(playHand, &two, shoe, scores, dealerCard, true, depth + 1);
+      playHand(one, shoe, scores, dealerCard, true, depth + 1);
+      playHand(two, shoe, scores, dealerCard, true, depth + 1);
 
-      first.join();
-      second.join();
+      
     }
     else{
-      std::thread first(playHand, &one, shoe, scores, dealerCard, false, depth + 1);
-      std::thread second(playHand, &two, shoe, scores, dealerCard, false, depth + 1);
-      first.join();
-      second.join();
+      playHand(one, shoe, scores, dealerCard, false, depth + 1);
+      playHand(two, shoe, scores, dealerCard, false, depth + 1);
+      
     }
 
   }
   //Unlock the critical section and let some other thread in
-  shoe.notUsing();  
-  lk.unlock();
-  cv.notify_one();
+  // shoe.notUsing();  
+  // lk.unlock();
+  // cv.notify_one();
   //End of critical section
 
   //Either we have to split the hand or just tally up the score 
   
-  if(instruction != Split){
+  else{
+    //Tally up the score and return our cards
+
     scores.push_back(score);
   }
 
@@ -192,6 +198,7 @@ void Individual::playRounds(int rounds)
   vector<int> scores;
   vector<Card*> hand;
   vector<Card*> dealer;
+  //pthread_t pid;
   for(int i = 0; i < rounds; i++){
     
 
@@ -236,10 +243,10 @@ void Individual::playRounds(int rounds)
 
     if(hand[0]->getScore() + hand[1]->getScore() != 21){
       //This thread will not return anything it just modifies scores
-      std::thread hand(playHand, &hand, &shoe, &scores, dealer[1]->getScore(), true, 0);
-
+      //pthread_create(&pid, );
+      playHand(hand, *shoe, scores, dealer[1]->getScore(), false, 0);
       //Wait for hand thread to finish up
-      hand.join();
+      //hand.join();
     }
     else{
       scores.push_back(21);

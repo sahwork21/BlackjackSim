@@ -18,17 +18,19 @@
 
 #include "../Shoe.h"
 #include <vector>
-#include <thread>
-#include <mutex>  
-#include <condition_variable>  
+#include <stdio.h>
+#include <cstring>
+// #include <thread>
+// #include <mutex>  
+// #include <condition_variable>  
+//#include <pthread.h>
 
 
 
 //Enum defining moves for an individual
 typedef enum{Hit, Stand, DoubleDown, Split} Move;
 
-//Collection of moves for construction purposes
-Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
+
 
 //Class containing a collection of grids and what to do
 //It will also have a hand of cards
@@ -36,11 +38,11 @@ class Individual
 {
   private:
     //Our mutex lock for playing hands
-    std::mutex lock;
+    //pthread_mutex_t lock;
     
 
     //Conditional variable to check if the shoe is currently in use
-    std::condition_variable cv;
+    //pthread_cond_t cv;
 
     //***************TODO make split work with some synchronization
     //Moves are 0 hit, 1 stand, 2 double down, 3 is split for future
@@ -56,10 +58,13 @@ class Individual
 
     int fitness;
 
+    //Collection of moves for construction purposes
+    Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
+
     //Underlying method that will play an individual hand if we split
     //Only splittable twice so if this method recursively calls itself set splittable to false
     //Just modify it and we will check on it later in playRounds
-    int playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable, int depth);
+    void playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable, int depth);
 
 
   public:
