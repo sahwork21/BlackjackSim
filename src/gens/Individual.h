@@ -20,6 +20,11 @@
 #include <vector>
 #include <stdio.h>
 #include <cstring>
+
+#ifdef TEST
+#include <iostream>
+#endif
+
 // #include <thread>
 // #include <mutex>  
 // #include <condition_variable>  

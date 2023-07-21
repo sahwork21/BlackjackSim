@@ -139,6 +139,11 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
   }
 
   if(instruction == Split){
+    #ifdef TEST
+      std::cout << "Splitting" << std::endl;
+    #endif
+
+
     //Create two vectors and make two more threads
     vector<Card*> one;
     one.push_back(hand.front());
@@ -174,8 +179,13 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
   
   else{
     //Tally up the score and return our cards
-
+    #ifdef TEST
+      std::cout << "Score is " << score << std::endl;
+    #endif
     scores.push_back(score);
+    while(hand.size() > 0){
+      hand.pop_back();
+    }
   }
 
   
@@ -256,13 +266,15 @@ void Individual::playRounds(int rounds)
     //Play the dealer's hand out
     while(dealerScore < 17){
       dealer.push_back(shoe->dealCard());
+      //add up the score from the last card
+      dealerScore += dealer[dealer.size() - 1]->getScore();
 
       //If we went bust we need to check for anything to reduce
       if(dealerScore > 21){
         int len = dealer.size();
         int i = 0;
         while(i < len && dealerScore > 21){
-
+        
           //We can reduce something
           if(dealer[i]->getReducable()){
             dealer[i]->reduce();
@@ -277,17 +289,26 @@ void Individual::playRounds(int rounds)
     //Now compare scores and add to fitness
     int len = scores.size();
     for(int i = 0; i < len; i++){
-
+      #ifdef TEST
+      std::cout << "Dealer Score vs Ind Score: " << dealerScore << " " << scores[i] << std::endl;
+      #endif
       //We win if we are under 21 and the dealer went bust or we have a greater score
       if(scores[i] > 21){
+
+        //We busted and the dealer didn't so we lose
         if(dealerScore <= 21){
           fitness--;
         }
       
       }
       else{
+
+        //We didn't bust and we have a better score or dealer busted
         if(scores[i] > dealerScore || dealerScore > 21){
           fitness++;
+        }
+        else if(dealerScore > scores[i]){
+
         }
       }
     }
@@ -296,13 +317,18 @@ void Individual::playRounds(int rounds)
     //The player's cards should return themsevles when being counted up
 
     while(dealer.size() > 0){
-      shoe->returnCard(dealer[0]);
+      shoe->returnCard(dealer[dealer.size() - 1]);
+      dealer.pop_back();
     }
 
     scores.clear();
 
 
   }
+
+  #ifdef TEST
+  std::cout << "Fitness: " << fitness << std::endl;
+  #endif
 }
 
 

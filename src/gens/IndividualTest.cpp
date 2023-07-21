@@ -8,6 +8,7 @@
  */
 
 #include "Individual.h"
+#include <iostream>
 
 using std::cout;
 using std::endl;
@@ -37,11 +38,27 @@ int main()
   //Check things like fitness and what not are set to default
   Individual *i = new Individual();
   total++;
+  cout << "Fitness default val: "<< i->getFitness() << endl;
   if(i->getFitness() != 0){
-    report(total, pass);
+    exit(report(total, pass));
     delete i;
   }
   pass++;
 
-  report(total, pass);
+  
+
+
+  //Let's just play one game and we can check if the fitness changed
+  //If the fitness did not change we should just replay
+  i->playRounds(1);
+
+  total++;
+  while(i->getFitness() == 0){
+    i->playRounds(1);
+  }
+  pass++;
+
+
+  exit(report(total, pass));
+
 }
