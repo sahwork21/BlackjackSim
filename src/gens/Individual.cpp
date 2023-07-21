@@ -94,17 +94,17 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
   //Keep going until we are told to stand, split, or 21 is reached
   while(score < 21 && instruction == Hit){
     //Check pairs then if we have an ace for a softhand
-    if(hand.size() == 2 && (hand[0]->getName().compare(hand[1]->getName()) || hand[0]->getScore() == hand[1]->getScore())){
+    if(hand.size() == 2 && (hand[0]->getName().compare(hand[1]->getName()) == 0 || hand[0]->getScore() == hand[1]->getScore())){
       
       instruction = pairHands[hand[1]->getScore() - 2][dealerCard - 2];
       
     }
 
     //Check softhands if there is an ace that is reducable
-    else if(hand[0]->getName().compare("Ace")){
+    else if(hand[0]->getName().compare("Ace") == 0){
       instruction = softHands[hand[1]->getScore() - 2][dealerCard - 2];
     }
-    else if(hand[1]->getName().compare("Ace")){
+    else if(hand[1]->getName().compare("Ace") == 0){
       instruction = softHands[hand[0]->getScore() - 2][dealerCard - 2];
     }
 
@@ -140,6 +140,8 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
 
   if(instruction == Split){
     #ifdef TEST
+      std::cout << *(hand[0]) << std::endl;
+      std::cout << *(hand[1]) << std::endl;
       std::cout << "Splitting" << std::endl;
     #endif
 
@@ -228,6 +230,7 @@ void Individual::playRounds(int rounds)
     int dealerScore = dealer[0]->getScore() + dealer[1]->getScore();
 
     //Reduce an ace if needed
+    //We know these are both aces 
     if(hand[0]->getScore() + hand[1]->getScore() == 22){
      
       hand[0]->reduce();
@@ -280,6 +283,7 @@ void Individual::playRounds(int rounds)
             dealer[i]->reduce();
             dealerScore -= 10;
           }
+          i++;
         }
       }
 
@@ -308,7 +312,7 @@ void Individual::playRounds(int rounds)
           fitness++;
         }
         else if(dealerScore > scores[i]){
-
+          fitness--;
         }
       }
     }

@@ -9,6 +9,7 @@
 
 #include "Individual.h"
 #include <iostream>
+#include <Windows.h>
 
 using std::cout;
 using std::endl;
@@ -54,6 +55,7 @@ int main()
 
   total++;
   while(i->getFitness() == 0){
+    Sleep(1000);
     i->playRounds(1);
   }
   pass++;
