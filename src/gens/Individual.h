@@ -20,6 +20,7 @@
 #include <vector>
 #include <stdio.h>
 #include <cstring>
+#include <random>
 
 #ifdef TEST
 #include <iostream>
@@ -34,6 +35,8 @@
 
 //Enum defining moves for an individual
 typedef enum{Hit, Stand, DoubleDown, Split} Move;
+
+Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
 
 #define HARD_ROWS 16;
 #define SOFT_ROWS 8;
@@ -66,7 +69,7 @@ class Individual
     int fitness;
 
     //Collection of moves for construction purposes
-    Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
+    
 
     //Underlying method that will play an individual hand if we split
     //Only splittable twice so if this method recursively calls itself set splittable to false
@@ -74,11 +77,22 @@ class Individual
     void playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, int dealerCard, bool splittable, int depth);
 
 
+    //Random number generator for creating new Individuals and move tables
+    //Engine for a random numbers
+    //std::mt19937 nums;
+    //population distribution selector. Goes 0 to 11 so we don't need distributions
+    //std::uniform_int_distribution<int> moveDist;
+    //Generate a random digit 1 - 100 to get probabilites
+    //std::uniform_int_distribution<int> crossDist;
+
   public:
     //The fields for our individual on this constructor are just random stuff for moves
     Individual();
     //Just fill in the arrays from what we have of a parent
     Individual(Move hard[16][10], Move soft[8][10], Move pair[10][10]);
+
+    //Special constructor that makes new individuals by combining two existing ones
+    //Individual(Individual *i1, Individual *i2, int mutatePercent, int crossPercent);
 
     //Destructor that just deletes the pointer
     //Since the fields are static allocated it should be good
@@ -97,6 +111,12 @@ class Individual
 
     //Get the fitness
     int getFitness() const;
+
+
+    //Get move squares
+    Move getHardHands(int r, int c) const;
+    Move getSoftHands(int r, int c) const;
+    Move getPairHands(int r, int c) const;
 
     #ifdef TEST
     void setFitness(int fitness);

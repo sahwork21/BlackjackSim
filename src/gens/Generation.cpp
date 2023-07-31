@@ -72,8 +72,6 @@ void Generation::createNextGeneration()
   
   //Create a new population from our cutoff
   //Consists of our best ones to transfer over
-  vector<Individual*> nextGen;
-  nextGen.reserve(populationSize);
 
 
   //Delete all the unneeded individuals
@@ -87,6 +85,17 @@ void Generation::createNextGeneration()
   //Create the new individuals
   int a;
   int b;
+  Individual *y;
+  Individual *z;
+  //Rows are your score columns is the dealer card
+  Move hardHands[16][10];
+  //Rows are ace plus the other 9 card types
+  Move softHands[8][10];
+  //Rows are the pair type
+  Move pairHands[10][10];
+
+  
+
   for(int i = 0; i < newIndividuals; i++){
     //Select random ones from 0 to our cutoff
     a = popDist(nums);
@@ -94,18 +103,61 @@ void Generation::createNextGeneration()
     while(a == b){
       b = popDist(nums);
     }
-    population.push_back(createChild(population[a], population[b]));
+
+    y = population[a];
+    z = population[b];
+
+
+    //Now fill out our table with the moves we need
+    for(int i = 0; i < 16; i++){
+      for(int j = 0; j < 10; j++){
+        if(mutatePercent < probDist(nums)){
+          hardHands[i][j] = moveCollection[probDist(nums) % 3];
+        }
+        else if(crossoverPercent < probDist(nums)){
+          hardHands[i][j] = y->getHardHands(i, j);
+        }
+        else{
+          hardHands[i][j] = z->getHardHands(i, j);
+        }
+      }
+    }
+
+    //Fill in softs then hards then pairs
+    for(int i = 0; i < 8; i++){
+      for(int j = 0; j < 10; j++){
+        if(mutatePercent < probDist(nums)){
+          softHands[i][j] = moveCollection[probDist(nums) % 3];
+        }
+        else if(crossoverPercent < probDist(nums)){
+          softHands[i][j] = y->getSoftHands(i, j);
+        }
+        else{
+          softHands[i][j] = z->getSoftHands(i, j);
+        }
+      }
+    }
+    //Fill in softs then hards then pairs
+    for(int i = 0; i < 10; i++){
+      for(int j = 0; j < 10; j++){
+        if(mutatePercent < probDist(nums)){
+          pairHands[i][j] = moveCollection[probDist(nums) % 4];
+        }
+        else if(crossoverPercent < probDist(nums)){
+          pairHands[i][j] = y->getPairHands(i, j);
+        }
+        else{
+          pairHands[i][j] = z->getPairHands(i, j);
+        }
+      }
+    }
+
+    //Now produce a new individual and add them to the population
+    population.push_back(new Individual(hardHands, softHands, pairHands));
 
   }
 
-
-  
-
-  
-
-  //Then combine them by randomly putting them together for our move squares
-
-
+  //We have create a new generation now
 
 
 

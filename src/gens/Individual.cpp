@@ -50,7 +50,7 @@ Individual::Individual() : fitness(0)
       pairHands[i][j] = moveCollection[rand() % 4];
     }
   }
-
+    
   //lock = PTHREAD_MUTEX_INITIALIZER;
   //cv = PTHREAD_COND_INITIALIZER;
 
@@ -359,6 +359,19 @@ bool Individual::operator<(const Individual & other) const
 int Individual::getFitness() const
 {
   return fitness;
+}
+
+Move Individual::getHardHands(int r, int c) const
+{
+  return hardHands[r][c];
+}
+Move Individual::getSoftHands(int r, int c) const
+{
+  return softHands[r][c];
+}
+Move Individual::getPairHands(int r, int c) const
+{
+  return pairHands[r][c];
 }
 
 #ifdef TEST

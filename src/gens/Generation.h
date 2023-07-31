@@ -45,7 +45,7 @@ private:
   std::uniform_int_distribution<int> probDist;
   //Create our next vector of individuals using our fields
   void createNextGeneration(); //Create the next generation of individuals from our info given to us
-  Individual* createChild(Individual* i1, Individual* i2);
+  //Individual* createChild(Individual* i1, Individual* i2);
 public:
   Generation(int populationSize, int selectedPercent, int crossoverPercent, int mutatePercent);
   ~Generation();
