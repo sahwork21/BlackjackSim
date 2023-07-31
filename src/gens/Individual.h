@@ -89,9 +89,19 @@ class Individual
     //Return true if we are greater, false otherwise
     bool operator>(const Individual& other) const;
 
+
+    //Default sort operator
+    bool operator<(const Individual& other) const;
+
     //Get the fitness
     int getFitness() const;
 
+    #ifdef TEST
+    void setFitness(int fitness);
+    #endif
+
 };
+
+
 
 #endif

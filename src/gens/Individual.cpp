@@ -339,14 +339,24 @@ void Individual::playRounds(int rounds)
 //Just compare the fitness of two of these objects
 bool Individual::operator>(const Individual & other) const
 {
-  if(this->fitness > other.getFitness()){
-    return true;
-  }
-  return false;
+  return this->fitness > other.getFitness();
+}
+
+bool Individual::operator<(const Individual & other) const
+{
+  return this->fitness < other.getFitness();
+  
 }
 
 int Individual::getFitness() const
 {
   return fitness;
 }
+
+#ifdef TEST
+void Individual::setFitness(int fitness)
+{
+  this->fitness = fitness;
+}
+#endif
 
