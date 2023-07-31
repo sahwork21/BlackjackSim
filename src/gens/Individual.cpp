@@ -262,7 +262,15 @@ void Individual::playRounds(int rounds)
       //hand.join();
     }
     else{
+      #ifdef TEST
+      std::cout << "Score is 21" << std::endl;
+      #endif
       scores.push_back(21);
+      //Return our cards too
+      shoe->returnCard(hand[hand.size() - 1]);
+      hand.pop_back();
+      shoe->returnCard(hand[hand.size() - 1]);
+      hand.pop_back();
     }
 
 

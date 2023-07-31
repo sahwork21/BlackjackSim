@@ -35,8 +35,10 @@
 //Enum defining moves for an individual
 typedef enum{Hit, Stand, DoubleDown, Split} Move;
 
-
-
+#define HARD_ROWS 16;
+#define SOFT_ROWS 8;
+#define PAIR_ROWS 10;
+#define COLS 10;
 //Class containing a collection of grids and what to do
 //It will also have a hand of cards
 class Individual

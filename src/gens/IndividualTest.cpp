@@ -65,7 +65,7 @@ int main()
 
 
   //Play a bunch of rounds
-  i->playRounds(10);
+  i->playRounds(100);
 
 
   delete i;
@@ -83,7 +83,7 @@ int main()
   Individual *i6 = new Individual();
 
   i2->setFitness(5);
-  i3->setFitness(8);
+  i3->setFitness(-8);
   i4->setFitness(1);
   i5->setFitness(87);
   i6->setFitness(8);
@@ -105,6 +105,13 @@ int main()
     cout << (*it)->getFitness() << ", ";
   }
   cout << endl;
+
+  delete i;
+  delete i2;
+  delete i3;
+  delete i4;
+  delete i5;
+  delete i6;
 
   pass++;
 
