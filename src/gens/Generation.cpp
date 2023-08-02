@@ -15,7 +15,6 @@ static std::uniform_int_distribution<int> popDist;
   //Generate a random digit 1 - 100 to get probabilitess
 static std::uniform_int_distribution<int> probDist;
 Generation::Generation(int populationSize, int selectedPercent, int crossoverPercent, int mutatePercent)
-  :nums(std::random_device()), popDist(0, selectionCutoff - 1), probDist(1, 100)
 {
   this->populationSize = populationSize;
   this->selectedPercent = selectedPercent;
@@ -34,7 +33,7 @@ Generation::Generation(int populationSize, int selectedPercent, int crossoverPer
 
   //Initialize our rng
   std::random_device *s = new std::random_device();
-  nums(s);
+  
 
 
 

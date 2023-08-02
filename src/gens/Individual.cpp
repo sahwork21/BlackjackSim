@@ -15,7 +15,7 @@
 #include "Individual.h"
 
 
-
+static Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
 
 //Simple destructor
 Individual::~Individual()
@@ -185,7 +185,10 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
       std::cout << "Score is " << score << std::endl;
     #endif
     scores.push_back(score);
+
+    //Return all of our cards
     while(hand.size() > 0){
+      shoe.returnCard(hand[hand.size() - 1]);
       hand.pop_back();
     }
   }
@@ -200,7 +203,7 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
 void Individual::playRounds(int rounds)
 {
   //Seed our random values
-  srand(time(0));
+  //srand(time(0));
 
   //Now we are using a shoe
   Shoe *shoe = new Shoe(6);

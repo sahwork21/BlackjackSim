@@ -36,7 +36,7 @@
 //Enum defining moves for an individual
 typedef enum{Hit, Stand, DoubleDown, Split} Move;
 
-Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
+
 
 #define HARD_ROWS 16;
 #define SOFT_ROWS 8;
