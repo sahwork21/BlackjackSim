@@ -19,7 +19,7 @@ class Generation
 private:
 
   //Sorting method that puts the fittest individuals first
-  bool indSort(Individual *i, Individual *j)
+  inline bool indSort(Individual *i, Individual *j)
   {
     return !(i->getFitness() < j->getFitness());
   }

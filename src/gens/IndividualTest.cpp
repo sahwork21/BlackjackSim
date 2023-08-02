@@ -99,7 +99,7 @@ int main()
 
 
   //Now sort it using std::sort using < operator defaultly
-  sort(sorted.begin(), sorted.end());
+  sort(sorted.begin(), sorted.end(), myfunction);
 
   cout << "Sorted Fitnesses: ";
   for(std::vector<Individual*>::iterator it = sorted.begin(); it != sorted.end(); it++){

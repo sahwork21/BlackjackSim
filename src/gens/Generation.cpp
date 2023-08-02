@@ -69,7 +69,7 @@ void Generation::simAll(int generations, int rounds)
   //Then sort them by fitness and recombine them
   for(int i = 0; i < generations; i++){
     simGeneration(rounds);
-    std::sort(population.begin(), population.end());
+    std::sort(population.begin(), population.end(), this.indSort);
     
     createNextGeneration();
   }
