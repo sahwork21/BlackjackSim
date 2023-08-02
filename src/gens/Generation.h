@@ -37,12 +37,7 @@ private:
   
 
 
-  //Engine for a random numbers
-  std::mt19937 nums;
-  //population distribution selector
-  std::uniform_int_distribution<int> popDist;
-  //Generate a random digit 1 - 100 to get probabilites
-  std::uniform_int_distribution<int> probDist;
+  
   //Create our next vector of individuals using our fields
   void createNextGeneration(); //Create the next generation of individuals from our info given to us
   //Individual* createChild(Individual* i1, Individual* i2);

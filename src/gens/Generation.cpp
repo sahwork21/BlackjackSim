@@ -8,9 +8,14 @@
 #include "Generation.h"
 
 
-
+//Engine for a random numbers
+static std::mt19937 nums;
+  //population distribution selector
+static std::uniform_int_distribution<int> popDist;
+  //Generate a random digit 1 - 100 to get probabilitess
+static std::uniform_int_distribution<int> probDist;
 Generation::Generation(int populationSize, int selectedPercent, int crossoverPercent, int mutatePercent)
-  :popDist(0, selectionCutoff - 1), probDist(1, 100), nums(std::random_device{})
+  :nums(std::random_device()), popDist(0, selectionCutoff - 1), probDist(1, 100)
 {
   this->populationSize = populationSize;
   this->selectedPercent = selectedPercent;
@@ -20,15 +25,26 @@ Generation::Generation(int populationSize, int selectedPercent, int crossoverPer
   selectionCutoff = selectedPercent * populationSize / 100;
   newIndividuals = populationSize - selectionCutoff;
 
+
+
   //Now populate our population with randomness
   for(int i = 0; i < populationSize; i++){
     population.push_back(new Individual());
   }
 
+  //Initialize our rng
+  std::random_device *s = new std::random_device();
+  nums(s);
+
+
+
   
 }
 
-Generation::~Generation(){}
+Generation::~Generation()
+{
+  population.clear();
+}
 
 int Generation::getGeneration() const
 {
@@ -111,10 +127,10 @@ void Generation::createNextGeneration()
     //Now fill out our table with the moves we need
     for(int i = 0; i < 16; i++){
       for(int j = 0; j < 10; j++){
-        if(mutatePercent < probDist(nums)){
+        if(mutatePercent <= probDist(nums)){
           hardHands[i][j] = moveCollection[probDist(nums) % 3];
         }
-        else if(crossoverPercent < probDist(nums)){
+        else if(crossoverPercent <= probDist(nums)){
           hardHands[i][j] = y->getHardHands(i, j);
         }
         else{
@@ -126,10 +142,10 @@ void Generation::createNextGeneration()
     //Fill in softs then hards then pairs
     for(int i = 0; i < 8; i++){
       for(int j = 0; j < 10; j++){
-        if(mutatePercent < probDist(nums)){
+        if(mutatePercent <= probDist(nums)){
           softHands[i][j] = moveCollection[probDist(nums) % 3];
         }
-        else if(crossoverPercent < probDist(nums)){
+        else if(crossoverPercent <= probDist(nums)){
           softHands[i][j] = y->getSoftHands(i, j);
         }
         else{
@@ -140,10 +156,10 @@ void Generation::createNextGeneration()
     //Fill in softs then hards then pairs
     for(int i = 0; i < 10; i++){
       for(int j = 0; j < 10; j++){
-        if(mutatePercent < probDist(nums)){
+        if(mutatePercent <= probDist(nums)){
           pairHands[i][j] = moveCollection[probDist(nums) % 4];
         }
-        else if(crossoverPercent < probDist(nums)){
+        else if(crossoverPercent <= probDist(nums)){
           pairHands[i][j] = y->getPairHands(i, j);
         }
         else{
@@ -157,7 +173,7 @@ void Generation::createNextGeneration()
 
   }
 
-  //We have create a new generation now
+  //We have created a new generation now
 
 
 

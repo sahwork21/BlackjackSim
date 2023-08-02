@@ -16,8 +16,7 @@ using std::cout;
 using std::endl;
 using std::cerr;
 
-int pass;
-int total;
+
 
 //Reports how many of the cases are passes
 static int report(int total, int pass)
@@ -39,6 +38,8 @@ static bool myfunction (Individual* i, Individual* j) { return (i->getFitness() 
  */
 int main()
 {
+  int pass = 0;
+  int total = 0;
   //Check things like fitness and what not are set to default
   Individual *i = new Individual();
   total++;
