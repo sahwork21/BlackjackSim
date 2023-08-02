@@ -31,16 +31,24 @@ private:
   int crossoverPercent; //Likelihood to get a crossover from parent 1. Probably should be 50
                         //Since this is a 50 percent sort of thing it should be even over all the moves we have
   int mutatePercent; //Probability of a mutation
-  int selectionCutoff; //Really just the cutoff for selecting new individuals
+  size_t selectionCutoff; //Really just the cutoff for selecting new individuals
 
   int newIndividuals; //The number of new individuals we make per round
   
 
 
-  
+  //Engine for a random numbers
+  std::mt19937 nums;
+  //population distribution selector
+  std::uniform_int_distribution<int> popDist;
+  //Generate a random digit 1 - 100 to get probabilites
+  std::uniform_int_distribution<int> probDist;
   //Create our next vector of individuals using our fields
   void createNextGeneration(); //Create the next generation of individuals from our info given to us
   //Individual* createChild(Individual* i1, Individual* i2);
+
+  
+
 public:
   Generation(int populationSize, int selectedPercent, int crossoverPercent, int mutatePercent);
   ~Generation();

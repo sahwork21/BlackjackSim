@@ -8,12 +8,7 @@
 #include "Generation.h"
 
 
-//Engine for a random numbers
-static std::mt19937 nums;
-  //population distribution selector
-static std::uniform_int_distribution<int> popDist;
-  //Generate a random digit 1 - 100 to get probabilitess
-static std::uniform_int_distribution<int> probDist;
+
 Generation::Generation(int populationSize, int selectedPercent, int crossoverPercent, int mutatePercent)
 {
   this->populationSize = populationSize;
@@ -32,8 +27,11 @@ Generation::Generation(int populationSize, int selectedPercent, int crossoverPer
   }
 
   //Initialize our rng
-  std::random_device *s = new std::random_device();
-  
+  std::random_device r;
+  std::seed_seq s {r(), r(), r(), r(), r(), r(), r(), r()};
+  nums.seed(s);
+  probDist.param(std::uniform_int_distribution<int>::param_type(1, 100));
+  popDist.param(std::uniform_int_distribution<int>::param_type(0, populationSize));
 
 
 
@@ -177,6 +175,4 @@ void Generation::createNextGeneration()
 
 
 }
-
-
 
