@@ -15,7 +15,7 @@
 #include "Individual.h"
 
 
-static Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
+
 
 //Simple destructor
 Individual::~Individual()

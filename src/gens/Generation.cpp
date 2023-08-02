@@ -127,7 +127,7 @@ void Generation::createNextGeneration()
     for(int i = 0; i < 16; i++){
       for(int j = 0; j < 10; j++){
         if(mutatePercent <= probDist(nums)){
-          hardHands[i][j] = moveCollection[probDist(nums) % 3];
+          hardHands[i][j] = y->moveCollection[probDist(nums) % 3];
         }
         else if(crossoverPercent <= probDist(nums)){
           hardHands[i][j] = y->getHardHands(i, j);
@@ -142,7 +142,7 @@ void Generation::createNextGeneration()
     for(int i = 0; i < 8; i++){
       for(int j = 0; j < 10; j++){
         if(mutatePercent <= probDist(nums)){
-          softHands[i][j] = moveCollection[probDist(nums) % 3];
+          softHands[i][j] = y->moveCollection[probDist(nums) % 3];
         }
         else if(crossoverPercent <= probDist(nums)){
           softHands[i][j] = y->getSoftHands(i, j);
@@ -156,7 +156,7 @@ void Generation::createNextGeneration()
     for(int i = 0; i < 10; i++){
       for(int j = 0; j < 10; j++){
         if(mutatePercent <= probDist(nums)){
-          pairHands[i][j] = moveCollection[probDist(nums) % 4];
+          pairHands[i][j] = y->moveCollection[probDist(nums) % 4];
         }
         else if(crossoverPercent <= probDist(nums)){
           pairHands[i][j] = y->getPairHands(i, j);

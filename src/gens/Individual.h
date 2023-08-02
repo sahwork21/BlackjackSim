@@ -17,6 +17,7 @@
 #define INDIVIDUAL_H
 
 #include "../Shoe.h"
+
 #include <vector>
 #include <stdio.h>
 #include <cstring>
@@ -33,7 +34,6 @@
 
 
 
-//Enum defining moves for an individual
 typedef enum{Hit, Stand, DoubleDown, Split} Move;
 
 
@@ -121,6 +121,8 @@ class Individual
     #ifdef TEST
     void setFitness(int fitness);
     #endif
+
+    Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
 
 };
 
