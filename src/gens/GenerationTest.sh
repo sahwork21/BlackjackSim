@@ -15,7 +15,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-g++ -Wall -std=c++17 -g -c ../Shoe.cpp -o Shoe.o
+g++ -Wall -std=c++17 -g -c ../Shoe.cpp -o Shoe.o -DWINDOWS
 if [ $? -ne 0 ]; then
     echo "Failed to make Shoe object"
     exit 1
@@ -35,7 +35,7 @@ fi
 
 
 
-g++ -Wall -std=c++17 -g Generation.o Individual.o Shoe.o Deck.o Card.o -o GenerationTest -DTEST
+g++ -Wall -std=c++17 -g GenerationTest.cpp Generation.o Individual.o Shoe.o Deck.o Card.o -o GenerationTest -DTEST
 
 if [ $? -ne 0 ]; then
     echo "Failed to compile Generation test"
