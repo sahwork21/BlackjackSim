@@ -10,6 +10,7 @@
 
 
 Generation::Generation(int populationSize, int selectedPercent, int crossoverPercent, int mutatePercent)
+  :generation(0)
 {
   this->populationSize = populationSize;
   this->selectedPercent = selectedPercent;
@@ -69,7 +70,7 @@ void Generation::simAll(int generations, int rounds)
   //Then sort them by fitness and recombine them
   for(int i = 0; i < generations; i++){
     simGeneration(rounds);
-    std::sort(population.begin(), population.end(), this.indSort);
+    std::sort(population.begin(), population.end(), myfunction);
     
     createNextGeneration();
   }

@@ -19,10 +19,7 @@ class Generation
 private:
 
   //Sorting method that puts the fittest individuals first
-  inline bool indSort(Individual *i, Individual *j)
-  {
-    return !(i->getFitness() < j->getFitness());
-  }
+  static bool myfunction (Individual* i, Individual* j) { return (i->getFitness() < j->getFitness()); }
 
   vector<Individual*> population;
   int generation; 
