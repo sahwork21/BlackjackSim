@@ -21,13 +21,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-g++ -Wall -std=c++17 -g -c Individual.cpp -o Individual.o
+g++ -Wall -std=c++17 -g -c Individual.cpp -o Individual.o 
 if [ $? -ne 0 ]; then
     echo "Failed to make Individual object"
     exit 1
 fi
 
-g++ -Wall -std=c++17 -g -c Generation.cpp -o Generation.o
+g++ -Wall -std=c++17 -g -c Generation.cpp -o Generation.o -DTEST
 if [ $? -ne 0 ]; then
     echo "Failed to make Generation object"
     exit 1

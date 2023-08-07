@@ -122,6 +122,9 @@ class Individual
     void setFitness(int fitness);
     #endif
 
+    //Set fitness to 0
+    void resetFitness();
+
     Move moveCollection[4] = {Hit, Stand, DoubleDown, Split};
 
 };

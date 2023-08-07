@@ -203,7 +203,7 @@ void Individual::playHand(vector<Card*>& hand, Shoe& shoe, vector<int>& scores, 
 void Individual::playRounds(int rounds)
 {
   //Seed our random values
-  //srand(time(0));
+  srand(time(0));
 
   //Now we are using a shoe
   Shoe *shoe = new Shoe(6);
@@ -375,6 +375,11 @@ Move Individual::getSoftHands(int r, int c) const
 Move Individual::getPairHands(int r, int c) const
 {
   return pairHands[r][c];
+}
+
+void Individual::resetFitness()
+{
+  fitness = 0;
 }
 
 #ifdef TEST

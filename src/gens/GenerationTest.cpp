@@ -27,7 +27,7 @@ int main()
   int total = 0;
 
   //Make an object and make sure they have the right population size
-  Generation *g = new Generation(100, 50, 15, 10);
+  Generation *g = new Generation(100, 15, 50, 10);
 
   total++;
   if(g->getGeneration() != 0){
@@ -42,6 +42,38 @@ int main()
   }
   pass++;
   
+
+  //Now do a generation of simming
+  total++;
+  g->simAll(1, 50);
+  
+
+  cout << "Fittest in first gen "<< g->getFittest()->getFitness() << endl;
+
+  if(g->getGeneration() != 1){
+    cerr << "generation should be 1 now" << endl;
+    return report(total, pass);
+  }
+  pass++;
+
+
+
+  //Do multiple generations
+  total++;
+  g->simAll(5, 50);
+
+  cout << "Fittest in sixth gen " << g->getFittest()->getFitness() << endl;
+  if(g->getGeneration() != 6){
+    cerr << "generation should be 6 now" << endl;
+    return report(total, pass);
+  }
+
+  pass++;
+
+
+
+
+  delete g;
 
 
   return report(total, pass);

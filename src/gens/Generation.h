@@ -13,13 +13,17 @@
 #include <algorithm>
 #include <random>
 
+#ifdef TEST
+#include <iostream>
+#endif
+
 
 class Generation
 {
 private:
 
-  //Sorting method that puts the fittest individuals first
-  static bool myfunction (Individual* i, Individual* j) { return (i->getFitness() < j->getFitness()); }
+  //Sorting method that puts the fittest individuals first. We want the fittest at the front of the vector
+  static bool myfunction (Individual* i, Individual* j) { return (i->getFitness() > j->getFitness()); }
 
   vector<Individual*> population;
   int generation; 

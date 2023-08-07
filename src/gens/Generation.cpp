@@ -9,6 +9,8 @@
 
 
 
+
+
 Generation::Generation(int populationSize, int selectedPercent, int crossoverPercent, int mutatePercent)
   :generation(0)
 {
@@ -32,7 +34,8 @@ Generation::Generation(int populationSize, int selectedPercent, int crossoverPer
   std::seed_seq s {r(), r(), r(), r(), r(), r(), r(), r()};
   nums.seed(s);
   probDist.param(std::uniform_int_distribution<int>::param_type(1, 100));
-  popDist.param(std::uniform_int_distribution<int>::param_type(0, populationSize));
+  //Select from our eligible parents that we want to continue on
+  popDist.param(std::uniform_int_distribution<int>::param_type(0, selectionCutoff - 1));
 
 
 
@@ -41,6 +44,15 @@ Generation::Generation(int populationSize, int selectedPercent, int crossoverPer
 
 Generation::~Generation()
 {
+
+  //If we are testing we want to be sure things are sorted properly
+  #ifdef TEST
+    for(int i = 0; i < populationSize; i++){
+      std::cout << population[i]->getFitness() << ", ";
+    }
+    std::cout << std::endl;
+  #endif
+
   population.clear();
 }
 
@@ -58,25 +70,34 @@ void Generation::simGeneration(int rounds)
 {
   //Sim for all individuals
   //It will likely be slow because I can't figure out threads
-  for(std::vector<Individual*>::iterator it = population.begin(); it != population.end(); it++){
-    (*it)->playRounds(rounds);
+  for(int i = 0; i < populationSize; i++){
+    population[i]->playRounds(rounds);
   } 
 
 }
 
 void Generation::simAll(int generations, int rounds)
 {
+  
+
+
   //Sim rounds for all the indviduals
   //Then sort them by fitness and recombine them
   for(int i = 0; i < generations; i++){
+    //Reset all the fitnesses
+    for(int j = 0; j < populationSize; j++){
+      population[j]->resetFitness();
+    }
+
+
     simGeneration(rounds);
     std::sort(population.begin(), population.end(), myfunction);
     
     createNextGeneration();
   }
 
+  //std::sort(population.begin(), population.end(), myfunction);
   
-
   
 }
 
@@ -90,11 +111,13 @@ void Generation::createNextGeneration()
 
   //Delete all the unneeded individuals
   Individual *temp;
-  while(population.size() >= selectionCutoff){
+  while(population.size() > selectionCutoff){
     temp = population.back();
     population.pop_back();
     delete temp;
   }
+
+ 
 
   //Create the new individuals
   int a;
