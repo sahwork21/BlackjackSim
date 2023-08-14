@@ -148,7 +148,7 @@ void Generation::createNextGeneration()
     //Now fill out our table with the moves we need
     for(int i = 0; i < 16; i++){
       for(int j = 0; j < 10; j++){
-        if(mutatePercent > probDist(nums)){
+        if(mutatePercent >= probDist(nums)){
           hardHands[i][j] = y->moveCollection[probDist(nums) % 3];
         }
         else if(crossoverPercent <= probDist(nums)){
@@ -163,7 +163,7 @@ void Generation::createNextGeneration()
     //Fill in softs then hards then pairs
     for(int i = 0; i < 8; i++){
       for(int j = 0; j < 10; j++){
-        if(mutatePercent > probDist(nums)){
+        if(mutatePercent >= probDist(nums)){
           softHands[i][j] = y->moveCollection[probDist(nums) % 3];
         }
         else if(crossoverPercent <= probDist(nums)){
@@ -177,7 +177,7 @@ void Generation::createNextGeneration()
     //Fill in softs then hards then pairs
     for(int i = 0; i < 10; i++){
       for(int j = 0; j < 10; j++){
-        if(mutatePercent > probDist(nums)){
+        if(mutatePercent >= probDist(nums)){
           pairHands[i][j] = y->moveCollection[probDist(nums) % 4];
         }
         else if(crossoverPercent <= probDist(nums)){
@@ -272,10 +272,10 @@ std::ostream& operator<<(std::ostream& strm, const Generation &g)
   //Fill in softs then hards then pairs
 
   strm << std::endl << "Pair hands" << std::endl << "  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A ";
-  z = 10;
+  z = 11;
   for(int i = 9; i >= 0; i--){
     
-    if(z == 10){
+    if(z == 11){
       strm << std::endl << " A";
     }
     else{
