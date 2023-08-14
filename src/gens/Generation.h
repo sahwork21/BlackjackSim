@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <random>
 
+
 #ifdef TEST
 #include <iostream>
 #endif
@@ -63,6 +64,10 @@ public:
 
   //Total sim which makes x generations and recombines them using a private method
   void simAll(int generations, int rounds);
+
+  //output stream
+  friend std::ostream& operator<<(std::ostream& strm, const Generation &g);
+
 
 };
 

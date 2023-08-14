@@ -23,6 +23,10 @@ static int report(int total, int pass)
 }
 int main()
 {
+  Individual *i = new Individual();
+  if(i->moveCollection[3] != Split){
+    return 1;
+  }
   int pass = 0;
   int total = 0;
 
@@ -75,6 +79,23 @@ int main()
 
   delete g;
 
+
+
+
+  //Now do some tests that will take many generations
+  //We have 100 individuals per generation, 15 top are picked, 50 percent crossovr, 10 percent mutations
+  g = new Generation(750, 15, 50, 10);
+
+  for(int i = 0; i < 10; i++){
+    g->simAll(10, 1000);
+    cout << *g;
+  }
+
+
+  delete g;
+
+  //Let's print out the best every 100 generations
+  
 
   return report(total, pass);
   

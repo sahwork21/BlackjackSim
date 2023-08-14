@@ -197,6 +197,115 @@ void Generation::createNextGeneration()
   //We have created a new generation now
 
 
+  
+}
 
+std::ostream& operator<<(std::ostream& strm, const Generation &g)
+{
+  //Print out our fittest individuals play chart
+
+  
+  Individual *f = g.population[0];
+  strm.width(2);
+  strm << "  Hard hands" << std::endl << "  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A ";
+
+  int z = 20;
+  //Print from highest score to lowest
+  for(int i = 15; i >= 0; i--){
+    if(z >= 10){
+      strm << std::endl << z;
+    }
+    else{
+      strm << std::endl << z << " ";
+    }
+      for(int j = 0; j < 10; j++){
+        
+        switch(f->getHardHands(i, j)){
+          case Stand:
+            strm << "| S ";
+            break;
+
+          case Hit:
+            strm << "| H ";
+            break;
+          
+          case DoubleDown:
+            strm << "| D ";
+            break;
+          
+          default:
+            break;
+          
+         
+        }
+      }
+    z--;
+  }
+
+  //Fill in softs then hards then pairs
+  strm << std::endl << "Soft hands" << std::endl << "  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A ";
+
+  z = 9; // 9 to 2
+  for(int i = 7; i >= 0; i--){
+    strm << std::endl << " " << z;
+    for(int j = 0; j < 10; j++){
+      switch(f->getSoftHands(i, j)){
+          case Stand:
+            strm << "| S ";
+            break;
+
+          case Hit:
+            strm << "| H ";
+            break;
+          
+          case DoubleDown:
+            strm << "| D ";
+            break;
+          default:
+            break;
+          
+        }
+      
+    }
+    z--;
+  }
+  //Fill in softs then hards then pairs
+
+  strm << std::endl << "Pair hands" << std::endl << "  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A ";
+  z = 10;
+  for(int i = 9; i >= 0; i--){
+    
+    if(z == 10){
+      strm << std::endl << " A";
+    }
+    else{
+      strm << std::endl << " " << z;
+    }
+    for(int j = 0; j < 10; j++){
+        
+        switch(f->getPairHands(i, j)){
+          case Stand:
+            strm << "| S ";
+            break;
+
+          case Hit:
+            strm << "| H ";
+            break;
+          
+          case DoubleDown:
+            strm << "| D ";
+            break;
+          
+          case Split:
+            strm << "| X ";
+            break;
+        }
+    }
+    z--;
+  }
+
+  strm << std::endl << std::endl;
+  
+  return strm;
 }
 
