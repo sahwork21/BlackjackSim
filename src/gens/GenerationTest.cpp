@@ -84,7 +84,7 @@ int main()
 
   //Now do some tests that will take many generations
   //We have 100 individuals per generation, 15 top are picked, 50 percent crossovr, 10 percent mutations
-  g = new Generation(750, 15, 50, 10);
+  g = new Generation(100, 10, 50, 10);
 
   for(int i = 0; i < 10; i++){
     g->simAll(10, 1000);
