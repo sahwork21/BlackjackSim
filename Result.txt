@@ -1,0 +1,90 @@
+Strategy of fittest individual after 500 generations where each individual played 200 games
+Generations consisted of 100 individuals, top 4% used for making new individuals, 5% mutation rate.
+Fitness of -41
+
+Hard hands
+    
+  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A
+20| S | S | S | S | D | D | S | S | H | S
+19| H | H | D | S | D | H | H | S | H | S
+18| D | H | H | H | D | H | H | D | H | S
+17| D | H | S | H | H | S | H | H | H | H 
+16| S | D | H | H | S | H | H | H | S | H
+15| S | H | S | D | D | S | D | S | H | H
+14| D | H | D | S | D | S | D | S | D | D
+13| D | D | S | S | S | H | S | H | H | S
+12| H | H | D | H | H | H | D | S | S | H
+11| S | S | D | D | S | D | D | S | H | H 
+10| S | H | S | D | S | H | H | H | S | H
+9 | D | D | S | H | S | H | H | D | D | D
+8 | D | S | D | H | D | D | S | S | S | D
+7 | D | H | S | H | S | D | S | S | S | H
+6 | H | S | D | S | H | S | H | H | H | D
+5 | D | D | S | S | H | D | D | S | S | D
+Soft hands
+  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A
+ 9| H | S | S | D | S | S | S | S | S | D 
+ 8| D | S | D | D | D | D | H | S | D | H
+ 7| S | H | D | S | D | H | H | D | S | D
+ 6| S | D | D | D | D | D | D | D | S | S
+ 5| D | D | H | D | H | D | H | D | D | D
+ 4| S | D | D | H | D | S | H | S | H | S
+ 3| S | H | D | H | S | H | H | H | H | D
+ 2| D | S | S | S | S | D | S | H | H | D
+Pair hands
+  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A
+ A| D | D | D | X | S | S | H | D | H | D
+10| H | D | D | D | D | D | X | X | H | S
+ 9| X | H | X | D | D | H | S | X | D | X
+ 8| H | D | H | D | X | D | S | D | S | S
+ 7| H | H | H | D | S | S | X | X | X | D
+ 6| H | D | S | S | H | H | S | D | D | D 
+ 5| D | S | D | X | H | H | D | D | S | X
+ 4| D | H | S | X | S | X | D | S | S | H
+ 3| D | S | D | H | H | X | H | S | S | H
+ 2| S | X | X | H | H | S | H | S | H | H
+
+Strategy of fittest individual after 500 generations where each individual played 200 games
+Generations consisted of 100 individuals, top 15% used for making new individuals, 5% mutation rate.
+Fitness of 5.
+
+   Hard hands
+  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A
+20| D | S | H | S | S | D | S | S | S | H
+19| S | S | S | S | D | S | S | S | S | S
+18| S | D | H | S | D | S | H | S | S | S 
+17| D | S | H | S | H | S | D | H | D | H
+16| D | H | D | D | S | S | H | H | H | S 
+15| D | H | H | H | H | D | H | H | H | H
+14| H | S | S | H | S | H | D | D | H | S
+13| S | H | D | H | D | H | H | H | S | H
+12| H | S | H | D | D | S | D | H | D | S 
+11| H | H | H | H | H | H | D | H | D | D
+10| S | D | D | S | S | S | H | H | D | S
+9 | D | H | D | D | D | H | H | H | H | H 
+8 | H | H | S | S | S | H | S | D | D | H
+7 | S | D | D | D | D | S | H | S | S | D
+6 | S | H | S | D | H | H | H | D | S | D 
+5 | D | H | D | D | S | H | D | D | D | S
+Soft hands
+  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A
+ 9| D | S | H | D | D | H | S | D | D | D
+ 8| D | H | S | H | D | S | H | H | S | H 
+ 7| H | H | S | H | H | H | D | H | H | H
+ 6| S | H | H | D | H | H | H | S | D | H
+ 5| H | D | D | H | H | S | S | H | H | D 
+ 4| S | S | S | H | D | H | D | S | S | S
+ 3| H | S | S | S | H | D | H | D | H | D
+ 2| H | H | D | D | D | S | S | D | D | D
+Pair hands
+  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| A
+ A| X | D | D | X | S | S | H | H | S | D 
+ 10| X | S | S | S | S | S | X | S | D | S
+ 9| X | X | X | S | D | S | H | X | D | D
+ 8| S | S | H | H | D | H | H | H | X | D 
+ 7| S | X | D | D | X | X | D | D | S | S
+ 6| S | D | X | S | H | S | H | H | X | S
+ 5| X | S | D | H | X | X | H | S | D | H
+ 4| H | D | H | X | X | D | D | H | D | H 
+ 3| H | S | D | H | H | S | D | D | X | H
+ 2| X | H | X | S | D | S | S | X | D | S
